@@ -1,13 +1,15 @@
-class PlayerPepe{
 
-    constructor(token, name, x, y, d, attack, defense, vp, image, object){
+
+class Player{
+
+    constructor(token, name, x, y, d, atac, defense, vp, image, object){
 
         this.token = token;
         this.name = name;
         this.x = x;
         this.y = y;
         this.d = d;
-        this.attack = attack;
+        this.atac = atac;
         this.defense = defense;
         this.vp = vp;
         this.image = image;
@@ -15,70 +17,65 @@ class PlayerPepe{
 
     }
 
-    attack(other){
-
-        if(this.attack - other.defense >= 0){
-        
-            other.vp -= this.attack - other.defense;
-
-            return this.attack - other.defense;
-        
-        }else{
-
-            return 0;
-
-        }
-
+    attack(){
+        attack(this.token,this.d)
+        .then(function (datums) {
+            var data = JSON.parse(datums);
+            console.log(data);
+        })
+        .catch(function (err) {
+            console.error('Augh, there was an error!', err.statusText);
+        })        
     }
 
     moveForward(){
-
-        moveX = this.x + Math.cos(this.d);
-        moveY = this.y + Math.sin(this.d);
-        
-        if(moveX > 40 || moveX < 0){
-
-            this.x = moveX;
-
-        }
-
-        if(moveY > 40 || moveY < 0){
-
-            this.y = moveY;
-
-        }
-
+        movePlayer(this.token,this.d)
+        .then(function (datums) {
+        })
+        .catch(function (err) {
+            console.error('Augh, there was an error!', err.statusText);
+        })
+        actualizePlayer();
+        return this;
     }
 
     moveBackwards(){
-
-        moveX = this.x - Math.cos(this.d);
-        moveY = this.y - Math.sin(this.d);
-        
-        if(moveX > 40 || moveX < 0){
-
-            this.x = moveX;
-
+        var posibleDir = ['N','E','S','O','N','E'];
+        for (let i = 0; i < posibleDir.length; i++) {
+            if(posibleDir[i] == this.d){
+                this.d = posibleDir[i+2];
+            }
         }
-
-        if(moveY > 40 || moveY < 0){
-
-            this.y = moveY;
-
-        }
-
+        movePlayer(this.token,this.d)
+        .then(function (datums) {
+        })
+        .catch(function (err) {
+            console.error('Augh, there was an error!', err.statusText);
+        })
+        actualizePlayer();
+        return this;
     }
 
     rotateRight(){
-
-        this.d = this.d - Math.PI/2
-
+        var posibleDir = ['N','E','S','O','N'];
+        for (let i = 0; i < posibleDir.length; i++) {
+            if(posibleDir[i] == this.d){
+                this.d = posibleDir[i+1];
+            }
+        }
+        return this;
     }
 
     rotateLeft(){
-
-        this.d = this.d + Math.PI/2
-
+        var posibleDir = ['N','O','S','E','N'];
+        for (let i = 0; i < posibleDir.length; i++) {
+            if(posibleDir[i] == this.d){
+                console.log(this.d);
+                this.d = posibleDir[i+1];
+                break;
+            }
+        }
+        return this;
     }
 
 }
@@ -96,4 +93,6 @@ class Item{
     }
 
 }
+
+
 
