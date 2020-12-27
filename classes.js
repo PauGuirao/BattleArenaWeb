@@ -133,7 +133,54 @@ class Enemie{
 
 class gameUI{
     constructor(){
+
+
         
+    }
+
+    drawMap(map){
+
+        let s = '<div class = "grid-container"> ';
+        for(let i = 0; i < 9; i++){
+
+            for(let j = 0; j < 9; j++){
+                let x = parseInt(map.player[0]) + i -4;
+                let y = parseInt(map.player[1]) + j -4;
+
+                console.log(x + ', ' + y);
+
+                if(x >= 0 && y >= 0){
+
+                    if(map.cuadricula[x][y] == 0){
+                        s += '<div class="grid-item"></div>';
+                    }
+
+                    if(map.cuadricula[x][y] == 1){
+                        s += '<div class="grid-enemy"></div>';
+                    }
+
+                    if(map.cuadricula[x][y] == 2){
+                        s += '<div class="grid-object"></div>';
+                    }
+
+                    if(map.cuadricula[x][y] == 3){
+                        s += '<div class="grid-player"></div>';
+                    }
+
+                }else{
+
+                    s += '<div class="grid-wall"></div>';
+
+                }
+
+            }
+
+        }
+
+        s += '</div>';
+
+        document.getElementById("body").innerHTML = s;
+
     }
 }
 
