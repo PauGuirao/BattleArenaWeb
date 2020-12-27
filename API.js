@@ -195,7 +195,7 @@ function attack(playerToken,direction) {
 function craft(playerToken,nom,url,attack,defense) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken,true);
+      xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken);
       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
