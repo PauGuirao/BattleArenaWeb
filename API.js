@@ -97,7 +97,7 @@ function getNearPlayers(playerToken) {
 function getMapInfo(playerToken) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', "http://battlearena.danielamo.info/api/map/b89f987e/"+playerToken);
+      xhr.open('GET', 'http://battlearena.danielamo.info/api/map/b89f987e/'+playerToken);
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response);
@@ -192,10 +192,10 @@ function attack(playerToken,direction) {
     });
 }
 
-function craft(playerToken,nom,url,attack,defense,) {
+function craft(playerToken,nom,url,attack,defense) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://battlearena.danielamo.info/api/attack/b89f987e/'+playerToken+'/',true);
+      xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken,true);
       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
@@ -217,8 +217,8 @@ function craft(playerToken,nom,url,attack,defense,) {
     });
 }
 
-
 var player = new Player('','','','','','','','','','');
+var mapa = new Map();
 
 function creaJugador(playerName){
   spawnPlayer(playerName)
@@ -247,6 +247,7 @@ function creaJugador(playerName){
   })
 }
 
+
 function actualizePlayer(){
   getPlayerInfo(player.token)
   .then(function (datums) {
@@ -263,6 +264,19 @@ function actualizePlayer(){
   })
   .catch(function (err) {
     console.error('Augh, there was an error!', err.statusText);
+  })
+}
+function actualizeMapa(){
+  getMapInfo(player.token)
+  .then(function (datums) {
+      var data = JSON.parse(datums);
+      for (let i = 0; i < data.enemies.length; i++) {
+        var enemie = new Enemie(data.enemies[i].x,data.enemies[i].y,data.enemies[i].direction,0,0); 
+        mapa.enemies.push(enemie);    
+      }
+  })
+  .catch(function (err) {
+      console.error('Augh, there was an error!', err.statusText);
   })
 }
 

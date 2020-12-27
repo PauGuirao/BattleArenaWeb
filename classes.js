@@ -1,5 +1,3 @@
-
-
 class Player{
 
     constructor(token, name, x, y, d, atac, defense, vp, image, object){
@@ -82,16 +80,61 @@ class Player{
 
 class Item{
 
-    constructor(token, name, attack, defense, image){
+    constructor(token, name, attack, defense, imagex,y){
 
         this.token = token;
         this.name = name;
         this.attack = attack;
         this.defense = defense;
         this.image = image;
+        this.x = x;
+        this.y = y;
 
     }
 
+}
+
+class Map{
+    constructor(){
+        var cuadricula = new Array(40);
+        for (var i = 0; i < cuadricula.length; i++) { 
+            cuadricula[i] = new Array(40); 
+        } 
+        for (var i = 0; i < 40; i++) {
+            for (var j = 0; j < 40; j++) { 
+                cuadricula[i][j] = 0; 
+            } 
+        }
+        this.cuadricula = cuadricula;
+        this.enemies = [];
+        this.objects = [];
+    }
+    // 1 --> enemic, 2--> objecte
+    actualitzaMapa(){
+        actualizeMapa();
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.cuadricula[this.enemies[i].x][this.enemies[i].y] = 1;
+        }
+        for (let i = 0; i < this.objects.length; i++) {
+            this.cuadricula[this.objects[i].x][this.objects[i].y] = 2;
+        }
+    }
+}
+
+class Enemie{
+    constructor(x,y,dir,vp,image){
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.vp = vp;
+        this.image = image;
+    }
+}
+
+class gameUI{
+    constructor(){
+        
+    }
 }
 
 
