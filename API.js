@@ -271,9 +271,21 @@ function actualizeMapa(){
   .then(function (datums) {
       var data = JSON.parse(datums);
       for (let i = 0; i < data.enemies.length; i++) {
-        var enemie = new Enemie(data.enemies[i].x,data.enemies[i].y,data.enemies[i].direction,0,0); 
-        mapa.enemies.push(enemie);    
+        var enemie = new Enemie(data.enemies[i].x,data.enemies[i].y,data.enemies[i].direction,0,0);
+        mapa.enemies.push(enemie);
+
       }
+      for (let i = 0; i < mapa.enemies.length; i++) {
+        mapa.cuadricula[mapa.enemies[i].x][mapa.enemies[i].y] = 1;
+      }
+
+      for (let i = 0; i < mapa.objects.length; i++) {
+        mapa.cuadricula[mapa.objects[i].x][mapa.objects[i].y] = 2;
+      }
+
+      mapa.player[0] = player.x;
+      mapa.player[1] = player.y;
+      mapa.cuadricula[mapa.player[0]][mapa.player[1]] = 3;
   })
   .catch(function (err) {
       console.error('Augh, there was an error!', err.statusText);

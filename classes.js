@@ -137,7 +137,7 @@ class gameUI{
 
     constructor(){
     }
-
+  
     drawMap(map){
         let s = '<div class = "grid-container"> ';
         console.log("Player position: "+map.player[0]+","+map.player[1]);
@@ -167,6 +167,7 @@ class gameUI{
         s += '</div>';
         document.getElementById("body").innerHTML = s;
     }
+  
 
     drawView(player,map){
         switch (player.d) {
@@ -202,6 +203,8 @@ class gameUI{
                 break;
         }
     }
+  
+  
     selectImage(element){
         switch (element) {
             case 0:
@@ -220,4 +223,4 @@ class gameUI{
         }
     }
 
-}
+}   
