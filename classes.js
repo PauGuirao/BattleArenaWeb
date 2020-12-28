@@ -95,7 +95,7 @@ class Item{
 }
 
 class Map{
-    constructor(){
+    constructor(player){
         var cuadricula = new Array(40);
         for (var i = 0; i < cuadricula.length; i++) { 
             cuadricula[i] = new Array(40); 
@@ -108,17 +108,19 @@ class Map{
         this.cuadricula = cuadricula;
         this.enemies = [];
         this.objects = [];
+        this.player = [];
+        this.player[0] = 0;
+        this.player[1] = 0;
     }
     // 1 --> enemic, 2--> objecte
     actualitzaMapa(){
         actualizeMapa();
-        for (let i = 0; i < this.enemies.length; i++) {
-            this.cuadricula[this.enemies[i].x][this.enemies[i].y] = 1;
-        }
-        for (let i = 0; i < this.objects.length; i++) {
-            this.cuadricula[this.objects[i].x][this.objects[i].y] = 2;
-        }
     }
+    //Retorna que hi ha a la posicio que li pasem
+    getPosInfo(x,y){
+        return this.cuadricula[x][y];
+    }
+
 }
 
 class Enemie{
@@ -132,56 +134,92 @@ class Enemie{
 }
 
 class gameUI{
+
     constructor(){
-
-
-        
     }
 
     drawMap(map){
-
         let s = '<div class = "grid-container"> ';
+        console.log("Player position: "+map.player[0]+","+map.player[1]);
         for(let i = 0; i < 9; i++){
-
             for(let j = 0; j < 9; j++){
-                let x = parseInt(map.player[0]) + i -4;
-                let y = parseInt(map.player[1]) + j -4;
-
-                console.log(x + ', ' + y);
-
+                let x = parseInt(map.player[0]) + i - 4;
+                let y = parseInt(map.player[1]) + j - 4;
+                console.log("Pos: "+x + "," + y);
                 if(x >= 0 && y >= 0){
-
                     if(map.cuadricula[x][y] == 0){
                         s += '<div class="grid-item"></div>';
                     }
-
                     if(map.cuadricula[x][y] == 1){
                         s += '<div class="grid-enemy"></div>';
                     }
-
                     if(map.cuadricula[x][y] == 2){
                         s += '<div class="grid-object"></div>';
                     }
-
                     if(map.cuadricula[x][y] == 3){
                         s += '<div class="grid-player"></div>';
                     }
-
                 }else{
-
                     s += '<div class="grid-wall"></div>';
-
                 }
-
             }
-
         }
-
         s += '</div>';
-
         document.getElementById("body").innerHTML = s;
-
     }
+
+    drawView(player,map){
+        switch (player.d) {
+            case "N":
+                var frontX = map.player[0];
+                var frontY = map.player[1]+1;
+                var element = map.getPosInfo(frontX,frontY);
+                console.log(element);
+                this.selectImage(element);
+                break;
+            case "S":
+                var frontX = map.player[0];
+                var frontY = map.player[1]-1;
+                var element = map.getPosInfo(frontX,frontY);
+                console.log(element);
+                this.selectImage(element);
+                break;
+            case "O":
+                var frontX = map.player[0]-1;
+                var frontY = map.player[1];
+                var element = map.getPosInfo(frontX,frontY);
+                console.log(element);
+                this.selectImage(element);
+                break;
+            case "E":
+                var frontX = map.player[0]+1;
+                var frontY = map.player[1];
+                var element = map.getPosInfo(frontX,frontY);
+                console.log(element);
+                this.selectImage(element);
+                break;
+            default:
+                break;
+        }
+    }
+    selectImage(element){
+        switch (element) {
+            case 0:
+                console.log("CAMI");
+                break;
+            case 1:
+                //dibuixar un enemic
+                console.log("ENEMIC");
+                break;
+            case 2:
+                //dibuixar un objecte
+                console.log("OBJECTE");
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 
 

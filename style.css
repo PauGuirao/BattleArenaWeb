@@ -3,6 +3,7 @@
     grid-template-columns: auto auto auto auto auto auto auto auto auto;
     background-color: #2196F3;
     padding: 0px;
+    max-width: 2.5%;
   }
   .grid-item {
     background-color: gray;
