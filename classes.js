@@ -313,6 +313,7 @@ class gameManager{
 
 }
 
+
 function pintaVisor(url){
     var canvas = document.getElementById('visor');
     var context = canvas.getContext('2d');
