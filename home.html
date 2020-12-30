@@ -1,13 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- JavaScript-->
     <script src="classes.js"></script>
     <script src="API.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- CSS-->
     <link rel="stylesheet" href="style.css">
+
+    <title>Battle Arena</title>
 </head>
 <body id="body">
+    <header>
+        <!-- Menu-->
+        <nav  class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">
+                BATTLE ARENA
+            </a>
+            <!-- Options-->
+            <div>
+                <button type="button" class="btn btn-primary">Start Game</button>
+                <button type="button" class="btn btn-primary">Load Game</button>
+                <button type="button" class="btn btn-primary">Save Game</button>
+                <button type="button" class="btn btn-primary">Delete Game</button>
+            </div>
+            <!-- /Options-->
+        </nav>
+        <!--/Menu-->
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <!-- Compass-->
+                    <div class="row">
+                        Compass
+                        <canvas id="compass" width="512" height="512"></canvas>
+                    </div>
+                    <!-- /Compass-->
+                    <!-- Object or Enemy-->
+                    <div class="row">
+                        <div class="col-sm">
+                            <img id="showEnemy" src="resources/objecte.jpeg" class="img-fluid"  alt="keyboard key right">
+                        </div>
+                        <div class="col-sm">
+                            <ul class="list-group list-group-flush">
+                                <li id="vidaEnemic" class="list-group-item">Name</li>
+
+                              </ul>
+                        </div>
+                    </div>
+                    <!-- /Object or Enemy-->
+                </div>
+
+                <div class="col-sm">
+                    <!-- Navigation-->
+                    <div class="container">
+                        <div class="row">
+                            Navigation
+                            <canvas id="navigation" width="512" height="512"></canvas>
+                        </div>
+                    </div>
+                    <!-- Navigation-->
+                    <!-- Keyboard-->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">                                
+                            </div>
+                            <div class="col-sm">                                
+                                <a href="#" onclick="player.moveForward()"><img src="resources/keyboard_key_up.png" class="img-fluid" width="64" height="64" alt="keyboard key left"></a>                            </div>
+                            <div class="col-sm">                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">   
+                                <a href="#" onclick="player.rotateLeft()"><img src="resources/keyboard_key_left.png" class="img-fluid" width="64" height="64" alt="keyboard key left"></a>                             
+                                
+                            </div>
+                            <div class="col-sm">                                
+                                <a href="#" onclick="player.moveBackwards()"><img src="resources/keyboard_key_down.png" class="img-fluid" width="64" height="64" alt="keyboard key left"></a>
+                            </div>
+                            <div class="col-sm">                                
+                                <a href="#" onclick="player.rotateRight()"><img src="resources/keyboard_key_right.png" class="img-fluid" width="64" height="64" alt="keyboard key left"></a>                            </div>
+                            </div>
+            
+                        <div class="row">
+                            <div class="col-sm">                                
+                                <a href="#" onclick="player.attack()"><img src="resources/keyboard_key_space.png" class="img-fluid" width="168" height="168" alt="keyboard key left"></a>                          
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Keyboard-->                   
+                </div>
+
+                <div class="col-sm">
+                    <!-- Minimap-->
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                Minimap
+                                <canvas id="minimap" width="320" height="320"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Minimap-->
+                    <!-- Player's Info-->
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-header">
+                                Player's Info
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li id="name" class="list-group-item">Name</li>
+                                <li id="vida" class="list-group-item">Vida</li>
+                                <li id="attack" class="list-group-item">Atack</li>
+                                <li id="defense" class="list-group-item">Defense</li>
+                              </ul>
+                        </div>
+                    </div>
+                    <!-- /Player's Info-->
+                    <!-- Player's Options-->
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-secondary">New</button>
+                            <button type="button" class="btn btn-secondary">Revive</button>
+                            <button type="button" class="btn btn-secondary">Delete Player</button>
+                        </div>
+                    </div>
+                    <!-- /Player's Options-->
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
 </body>
 </html>
