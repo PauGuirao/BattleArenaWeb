@@ -195,7 +195,7 @@ function attack(playerToken,direction) {
 function craft(playerToken,nom,url,attack,defense) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken,true);
+      xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken);
       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
@@ -216,6 +216,15 @@ function craft(playerToken,nom,url,attack,defense) {
       xhr.send(JSON.stringify({ "name": nom, "image": url, "attack": attack, "defense": defense }));
     });
 }
+function crafter(token,nom,atac,defensa)
+{
+    var xhr = new XMLHttpRequest();
+    var url = "https://www.google.com/search?q=wool+minecraft&rlz=1C1CHBF_esES921ES921&sxsrf=ALeKk02BIu4TCH7f5AD4rH2HJBoLjKqljA:1609416797700&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjtsZbkmPjtAhWiQUEAHfiaARIQ_AUoAXoECAEQAw&biw=1280&bih=578#imgrc=0hLE1pMuBt6CNM";
+    xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+token,false);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({ "name": nom, "image": url, "attack": atac, "defense": defensa }));
+    return xhr.status;
+} 
 
 function pickup(playerToken,objectToken) {
   return new Promise(function (resolve, reject) {

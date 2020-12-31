@@ -6,7 +6,7 @@ class Player{
         this.y = y;
         this.d = d;
         this.atac = atac;
-        this.defense = defense;
+        this.defense  = defense;
         this.vp = vp;
         this.image = image;
         this.object = object;
@@ -26,11 +26,12 @@ class Player{
     moveForward(){
         movePlayer(this.token,this.d)
         .then(function (datums) {
+            actualizePlayer();
         })
         .catch(function (err) {
             console.error('Augh, there was an error!', err.statusText);
         })
-        actualizePlayer();
+        
     }
 
     moveBackwards(){
@@ -38,6 +39,7 @@ class Player{
         for (let i = 0; i < posibleDir.length; i++) {
             if(posibleDir[i] == this.d){
                 this.d = posibleDir[i+2];
+                break;
             }
         }
         this.moveForward();
@@ -337,25 +339,31 @@ function drawMap(){
 function drawView(){
     switch (player.d) {
         case "N":
+            console.log("dibuixare el nord");
             var frontX = map.player[0];
-            var frontY = map.player[1]+1;
+            var frontY = map.player[1];
+            frontY++;
             var element = map.getPosInfo(frontX,frontY);
             selectImage(element);
             break;
         case "S":
             var frontX = map.player[0];
             var frontY = map.player[1]-1;
+            console.log(frontX+" i "+frontY);
             var element = map.getPosInfo(frontX,frontY);
+            console.log(element);
             selectImage(element);
             break;
         case "O":
             var frontX = map.player[0]-1;
             var frontY = map.player[1];
             var element = map.getPosInfo(frontX,frontY);
+            console.log(element);
             selectImage(element);
             break;
         case "E":
-            var frontX = map.player[0]+1;
+            var frontX = map.player[0];
+            frontX++;
             var frontY = map.player[1];
             var element = map.getPosInfo(frontX,frontY);
             selectImage(element);
@@ -424,7 +432,8 @@ function drawEnemie(){
     .then(function (datums) {
         var data = JSON.parse(datums);
         var enemies = data.enemies;
-        var pos = getFrontPos(); 
+        var pos = getFrontPos();
+
         for (let i = 0; i < enemies.length; i++) {
             if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
                 console.log(enemies[i]);
@@ -443,7 +452,8 @@ function getFrontPos(){
     switch (player.d) {
         case 'N':
             pos[0] = player.x;
-            pos[1] = player.y+1;
+            pos[1] = player.y;
+            pos[1]++;
             break;
         case 'S':
             pos[0] = player.x;
@@ -454,7 +464,8 @@ function getFrontPos(){
             pos[1] = player.y;
             break;
         case 'E':
-            pos[0] = player.x+1;
+            pos[0] = player.x;
+            pos[0]++;
             pos[1] = player.y;
             break;
         default:
