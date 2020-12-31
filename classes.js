@@ -11,7 +11,6 @@ class Player{
         this.image = image;
         this.object = object;
     }
-
     attack(){
         attack(this.token,this.d)
         .then(function (datums) {
