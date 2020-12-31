@@ -250,4 +250,3 @@ function pickup(playerToken,objectToken) {
   });
 }
 
-

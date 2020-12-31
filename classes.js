@@ -147,7 +147,7 @@ class gameManager{
         fillUser(player.token);
         map = new Map();
         drawPlayerInfo();
-        setInterval(document.onkeydown = this.checkKeys, 6);
+        setInterval(document.onkeydown = this.checkKeys, 2000);
         setInterval(actualitzaInfo,2000);
     }
 
@@ -158,22 +158,26 @@ class gameManager{
         }else{
             
             switch (e.keyCode) {
-                case 87:
+                case 38 :
                     player.moveForward();
                     console.log(player);
                     break;
-                case 83:
+                case 40 :
                     player.moveBackwards();
                     console.log(player);
                     break;
-                case 65:
+                case 37 :
                     player.rotateLeft();
                     drawView();
+                    fillMap();
+                    actualitzaBruixola();
                     console.log(player);
                     break;
-                case 68:
+                case 39 :
                     player.rotateRight();
                     drawView();
+                    fillMap();
+                    actualitzaBruixola();
                     console.log(player);
                     break;
                 default:
@@ -282,7 +286,14 @@ function fillMap(){
           map.enemies.push(enemie);
         }
         for (let i = 0; i < map.enemies.length; i++) {
-          map.cuadricula[map.enemies[i].x][map.enemies[i].y] = 1;
+            let rotation = 0;
+            let posibleDir = ['O','N','E','S'];
+            for (let p = 0; p < posibleDir.length; p++) {
+                if(posibleDir[p] == map.enemies[p].dir){
+                    rotation = p;
+                }
+            }
+            map.cuadricula[map.enemies[i].x][map.enemies[i].y] = 4 + rotation;
         }
   
         for (let i = 0; i < map.objects.length; i++) {
@@ -322,18 +333,121 @@ function drawMap(){
                 context.rect(i*8, j*8, 8, 8);
                 context.stroke();
             }
-            if(map.cuadricula[i][j] == 1){
-                //console.log("enemic");
-                context.fillStyle = "#FF0000";
-                context.fillRect(i*8,j*8, 8, 8);
-            }
             if(map.cuadricula[i][j] == 3){
                 console.log("player");
+                let rotation = 0;
+                let posibleDir = ['O','N','E','S'];
+                for (let p = 0; p < posibleDir.length; p++) {
+                    if(posibleDir[p] == player.d){
+                        rotation = p;
+                    }
+                }
+                
+                context.beginPath();
+                if (rotation == 0){
+                    context.moveTo(i * 8 + 1, j * 8 + 4);
+                    context.lineTo(i * 8 + 7, j * 8 + 1);
+                    context.lineTo(i * 8 + 7, j * 8 + 7);
+                }
+
+                if (rotation == 1){
+                    context.moveTo(i * 8 + 4, j * 8 + 1);
+                    context.lineTo(i * 8 + 7, j * 8 + 7);
+                    context.lineTo(i * 8 + 1, j * 8 + 7);
+                }
+
+                if (rotation == 2){
+                    context.moveTo(i * 8 + 7, j * 8 + 4);
+                    context.lineTo(i * 8 + 1, j * 8 + 1);
+                    context.lineTo(i * 8 + 1, j * 8 + 7);
+                }
+
+                if (rotation == 3){
+                    context.moveTo(i * 8 + 4, j * 8 + 7);
+                    context.lineTo(i * 8 + 7, j * 8 + 1);
+                    context.lineTo(i * 8 + 1, j * 8 + 1);
+                }
+
+                context.closePath();
+                context.lineWidth = 0;
+                context.strokeStyle = '#666666';
+                context.stroke();
                 context.fillStyle = "#7CFC00";
-                context.fillRect(i*8,j*8, 8, 8);
+                context.fill();
+            }
+
+            if(map.cuadricula[i][j] == 4){
+                //console.log("enemic");
+                context.beginPath();
+                context.moveTo(i * 8 + 1, j * 8 + 4);
+                context.lineTo(i * 8 + 7, j * 8 + 1);
+                context.lineTo(i * 8 + 7, j * 8 + 7);
+                context.closePath();
+                context.lineWidth = 0;
+                context.strokeStyle = '#666666';
+                context.stroke();
+                context.fillStyle = "#FF0000";
+                context.fill();
+            }
+
+            if(map.cuadricula[i][j] == 5){
+                //console.log("enemic");
+                context.beginPath();
+                context.moveTo(i * 8 + 4, j * 8 + 1);
+                context.lineTo(i * 8 + 7, j * 8 + 7);
+                context.lineTo(i * 8 + 1, j * 8 + 7);
+                context.closePath();
+                context.lineWidth = 0;
+                context.strokeStyle = '#666666';
+                context.stroke();
+                context.fillStyle = "#FF0000";
+                context.fill();
+            }
+
+            if(map.cuadricula[i][j] == 6){
+                //console.log("enemic");
+                context.beginPath();
+                context.moveTo(i * 8 + 7, j * 8 + 4);
+                context.lineTo(i * 8 + 1, j * 8 + 1);
+                context.lineTo(i * 8 + 1, j * 8 + 7);
+                context.closePath();
+                context.lineWidth = 0;
+                context.strokeStyle = '#666666';
+                context.stroke();
+                context.fillStyle = "#FF0000";
+                context.fill();
+            }
+
+            if(map.cuadricula[i][j] == 7){
+                //console.log("enemic");
+                context.beginPath();
+                context.moveTo(i * 8 + 4, j * 8 + 7);
+                context.lineTo(i * 8 + 7, j * 8 + 1);
+                context.lineTo(i * 8 + 1, j * 8 + 1);
+                context.closePath();
+                context.lineWidth = 0;
+                context.strokeStyle = '#666666';
+                context.stroke();
+                context.fillStyle = "#FF0000";
+                context.fill();
             }
         }
     }
+}
+
+function drawTriangle (color, direction, x, y, stroke){
+
+    context.beginPath();
+    context.moveTo(x * 8 + 1, y * 8 + 4);
+    context.lineTo(x * 8 + 7, y * 8 + 1);
+    context.lineTo(x * 8 + 7, y * 8 + 7);
+    context.closePath();
+    context.lineWidth = 0;
+    context.strokeStyle = stroke;
+    context.stroke();
+    context.fillStyle = color;
+    context.fill();
+
 }
 //Dibuixa el visor a la interficie grafica
 function drawView(){
