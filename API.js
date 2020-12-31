@@ -241,4 +241,3 @@ function pickup(playerToken,objectToken) {
   });
 }
 
-
