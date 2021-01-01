@@ -54,3 +54,67 @@
     max-width:2.5%;
     max-height:2.5%;
   }
+
+  /*UI*/
+  @font-face {
+    font-family: "Dalelands";
+    src: url("resources/dalelands-font/DalelandsUncialCondensedBold-MEyv.ttf");
+  }
+  @font-face {
+    font-family: "Dalelands regular";
+    src: url("resources/dalelands-font/DalelandsUncial-BOpn.ttf");
+  }
+
+  body{
+    background-image: url(resources/background.jpg);
+  }
+
+  p{
+    color: white;
+    text-transform: uppercase;
+    font-family: "Dalelands";
+  }
+
+  #logo{
+    margin-left: 60px;
+  }
+
+  #buttons{
+    margin-right: 33px;
+  }
+
+  .btn {
+    background-color: #2c140b;
+    border: 10px transparent;
+    font-family: "Dalelands";
+    text-transform: uppercase;
+  }
+
+  .navbar-brand{
+    color: white;
+    font-family: "Dalelands";
+    font-size: 150%;
+  }
+
+  #keyboard{
+    margin: 0;
+    padding: 0;
+  }
+
+  .row{
+    border: 10px solid transparent;
+  }
+
+  .card-header{
+    background-color: #c38d60;
+    color: white;
+    font-family: "Dalelands regular";
+    text-transform: uppercase;
+  }
+
+  .list-group-item{
+    background-color: transparent;
+    color: white;
+    font-family: "Dalelands regular";
+  }
+

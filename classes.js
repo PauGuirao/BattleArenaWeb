@@ -1,6 +1,6 @@
 class Player{
-    constructor(token, name, x, y, d, atac, defense, vp, image, object){
-        this.token = token;
+    constructor(token, name, x, y, d, atac, defense, vp, image, object, delToken){
+        this.token = token; 
         this.name = name;
         this.x = x;
         this.y = y;
@@ -10,8 +10,8 @@ class Player{
         this.vp = vp;
         this.image = image;
         this.object = object;
+        this.delToken = delToken;
     }
-
     attack(){
         attack(this.token,this.d)
         .then(function (datums) {
@@ -135,6 +135,7 @@ class Enemie{
 //VARIABLES GLOBALS
 var player;
 var map;
+var gm;
 
 class gameManager{
     
@@ -242,7 +243,18 @@ function creaJugador(playerName){
 }
 
 function startGame(){
-    
+    gm = new gameManager();
+    gm.startGame('Player-Grup33');
+}
+
+function deleteUser(){
+    removePlayer(player.token,player.delToken)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+      })
+      .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+      })
 }
 
 //Fa una peticio a la API per crear un usuari
@@ -253,6 +265,7 @@ function createUser(name){
     var data = JSON.parse(xhr.responseText);
     var player = new Player('','','','','','','','','','');
     player.token = data.token;
+    player.delToken = data.code;
     return player;
 }
 //Fa una peticio a la API per omplenar un usuari
@@ -494,13 +507,14 @@ function selectImage(element){
             pintaVisor('cami.jpeg');
             break;
         case 1:
-            pintaVisor('enemic.jpeg');
+            
             break;
         case 2:
             //dibuixar un objecte
             pintaVisor('objecte.jpeg');
             break;
-        default: 
+        default:
+            pintaVisor('enemic.jpeg'); 
             break;
     }
 }
