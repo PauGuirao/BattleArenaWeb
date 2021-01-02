@@ -3,6 +3,9 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="UTF-8">
+    <meta name="description" content="Battle Arena Game">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap, Game">
+    <meta name="author" content="Pau, Jaume, Arnau">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- JavaScript-->
     <script src="classes.js"></script>
@@ -16,10 +19,10 @@
 <body id="body">
     <header>
         <!-- Menu-->
-        <nav  class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">
-                BATTLE ARENA
-            </a>
+        <nav  class="navbar navbar-default" role="navigation">
+            <div>
+                <img src="resources/logo.png" class="img-fluid" id="logo" height="25" width="150" alt="logo">
+            </div>
             <!-- Options-->
             <div>
                 <div class="container">
@@ -35,7 +38,7 @@
                     </div>
                 </div>
                  <!-- Player's Options-->
-                    <div class="col">
+                    <div class="col" id="buttons">
                         <button type="button" class="btn btn-secondary" onclick="startGame()">New Player</button>
                         <button type="button" class="btn btn-secondary">Revive Player</button>
                         <button type="button" class="btn btn-secondary" onclick="deleteUser()">Delete Player</button>
@@ -51,8 +54,8 @@
             <div class="row">
                 <div class="col">
                     <!-- Compass-->
-                    <div class="row">
-                        Compass
+                    <div class="row compass">
+                        <p>Compass</p>
                         <canvas id="compass" width="312" height="312"></canvas>
                     </div>
                     <!-- /Compass-->
@@ -64,12 +67,17 @@
                                 Player's Info
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li id="name" class="list-group-item">Name</li>
-                                <li id="vida" class="list-group-item">Vida</li>
-                                <li id="attack" class="list-group-item">Atack</li>
-                                <li id="defense" class="list-group-item">Defense</li>
+                                <li id="name" class="list-group-item">Name:</li>
+                                <li id="vida" class="list-group-item">Life:</li>
+                                <li id="attack" class="list-group-item">Attack:</li>
+                                <li id="defense" class="list-group-item">Defense:</li>
                               </ul>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <p>Object</p>
+                        <canvas id="object" width="312" height="312"></canvas>
                     </div>
                     <!-- /Player's Info-->
 
@@ -77,39 +85,35 @@
                 <div class="col-5">
                     <!-- Navigation-->
                     <div class="row">
-                        Navigation
+                        <p>Navigation</p>
                         <canvas id="navigation" width="512" height="512"></canvas>
                     </div>
                     <!-- Navigation-->
                            
-                    <!-- Object or Enemy-->
+                    <!-- Enemy-->
                     <div class="row">
-                        <div class="col-sm">
+                        <div class="col-4 border">
                             <img id="showEnemy" src="resources/objecte.jpeg" class="img-fluid"  alt="keyboard key right">
                         </div>
-                        <div class="col-sm">
-                            <ul class="list-group list-group-flush">
-                                <li id="vidaEnemic" class="list-group-item">Name</li>
-
-                              </ul>
+                        <div class="col-sm border">
+                            <p id="vidaEnemic">Name: </p>
+                            <p id="atacEnemic"></p>
                         </div>
                     </div>
-                    <!-- /Object or Enemy-->
+                    <!-- Enemy-->
                 </div>
                 <div class="col">
                     <!-- Minimap-->
                     <div class="row">
                         <div class="col">
-                            <div class="row">
-                                Minimap
-                                <canvas id="minimap" width="320" height="320"></canvas>
-                            </div>
+                            <p>Minimap</p>
+                            <canvas id="minimap" width="320" height="320"></canvas>
                         </div>
                     </div>
                     <!-- /Minimap-->
 
                     <!-- Keyboard-->
-                    <div class="container">
+                    <div class="container" id="keyboard">
                         <div class="row">
                             <div class="col-sm">                                
                             </div>
@@ -142,7 +146,6 @@
         </div>
     </main>
     <footer>
-
     </footer>
 </body>
 </html>

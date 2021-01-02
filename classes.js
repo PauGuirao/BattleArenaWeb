@@ -17,6 +17,10 @@ class Player{
             attack(this.token,this.d)
             .then(function (datums) {
                 var data = JSON.parse(datums);
+                localStorage.setItem('Damage',data);
+                document.getElementById("atacEnemic").innerHTML = "Li has tret "+data+" de vida!";
+                var audio = new Audio('resources/attack.wav');
+                audio.play();
                 console.log(data);
             })
             .catch(function (err) {
@@ -31,12 +35,13 @@ class Player{
             movePlayer(this.token,this.d)
             .then(function (datums) {
                 actualizePlayer();
+                var audio = new Audio('resources/step.wav');
+                audio.play();
             })
             .catch(function (err) {
                 console.error('Augh, there was an error!', err.statusText);
             })
-        }
-        
+        } 
     }
 
     moveBackwards(){
@@ -266,6 +271,14 @@ function creaJugador(playerName){
 function startGame(){
     gm = new gameManager();
     gm.startGame('Player-Grup33');
+    saveToLocal('Times',1);
+    var start_Audio = new Audio('resources/startSound.wav');
+    start_Audio.play();
+    var ambientAudio = new Audio('resources/ambient.mp3');
+    ambientAudio.volume = 0.5;
+    ambientAudio.play();
+    ambientAudio.loop = true;
+    
 }
 
 function deleteUser(){
@@ -351,6 +364,10 @@ function drawPlayerInfo(){
     document.getElementById("vida").innerHTML = "Vida "+player.vp;
     document.getElementById("attack").innerHTML = "Attack "+player.atac;
     document.getElementById("defense").innerHTML = "Defense "+player.defense;
+}
+
+function getObjectInFront(){
+
 }
 //Dibuixa el mapa a la interficie grafica
 function drawMap(){
@@ -590,7 +607,7 @@ function drawEnemie(){
             if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
                 console.log(enemies[i]);
                 document.getElementById("showEnemy").src="resources/my_character-"+enemies[i].image+".png";
-                document.getElementById("vidaEnemic").innerHTML = "Enemic amb "+enemies[i].vitalpoints+" de vida";
+                document.getElementById("vidaEnemic").innerHTML = "Ey! tens un enemic devant amb "+enemies[i].vitalpoints+" de vida";
                 break;
             }
         }
@@ -626,27 +643,15 @@ function getFrontPos(){
     return pos;
 }
 
-/**
-function checkEnemies(){
-
-    for(let i = 0; i < map.enemies.length; i++){
-
-        if(map.enemies[i].vitalpoints <= 0){
-
-            delete(map.enemies[i]);
-
-            for(let j = i + 1; j < map.enemies.length; j++){
-
-                map.enemies[j - 1] = map.enemies[j];
-
-            }
-
-        }
-
+function saveToLocal(key,item){
+    if (localStorage.getItem(key) === null) {
+        localStorage.setItem(key,item);
+    }else{
+        var value = localStorage.getItem(key);
+        value += item;
+        localStorage.setItem(key,value);
     }
-
 }
-*/
 
 function actualitzaInfo(){
     //checkEnemies();
