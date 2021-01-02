@@ -13,42 +13,54 @@ class Player{
         this.delToken = delToken;
     }
     attack(){
-        attack(this.token,this.d)
-        .then(function (datums) {
-            var data = JSON.parse(datums);
-            console.log(data);
-            localStorage.setItem('Damage',data);
-            document.getElementById("atacEnemic").innerHTML = "Li has tret "+data+" de vida!";
-            var audio = new Audio('resources/attack.wav');
-            audio.play();
-        })
-        .catch(function (err) {
-            console.error('Augh, there was an error!', err.statusText);
-        })        
+        if(this.vp > 0){
+            attack(this.token,this.d)
+            .then(function (datums) {
+                var data = JSON.parse(datums);
+                localStorage.setItem('Damage',data);
+                document.getElementById("atacEnemic").innerHTML = "Li has tret "+data+" de vida!";
+                var audio = new Audio('resources/attack.wav');
+                audio.play();
+                console.log(data);
+            })
+            .catch(function (err) {
+               console.error('Augh, there was an error!', err.statusText);
+            })
+        }        
     }
 
     moveForward(){
-        movePlayer(this.token,this.d)
-        .then(function (datums) {
-            actualizePlayer();
-            var audio = new Audio('resources/step.wav');
-            audio.play();
-        })
-        .catch(function (err) {
-            console.error('Augh, there was an error!', err.statusText);
-        })
-        
+        var checkPos = getFrontPos();
+        if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
+            movePlayer(this.token,this.d)
+            .then(function (datums) {
+                actualizePlayer();
+                var audio = new Audio('resources/step.wav');
+                audio.play();
+            })
+            .catch(function (err) {
+                console.error('Augh, there was an error!', err.statusText);
+            })
+        } 
     }
 
     moveBackwards(){
         var posibleDir = ['N','E','S','O','N','E'];
-        for (let i = 0; i < posibleDir.length; i++) {
-            if(posibleDir[i] == this.d){
-                this.d = posibleDir[i+2];
-                break;
+        var checkPos = getFrontPos();
+        if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
+            for (let i = 0; i < posibleDir.length; i++) {
+                if(posibleDir[i] == this.d){
+                    movePlayer(this.token, posibleDir[i+2])
+                    .then(function (datums) {
+                        actualizePlayer();
+                    })
+                    .catch(function (err) {
+                        console.error('Augh, there was an error!', err.statusText);
+                    })
+                    break;
+                }
             }
         }
-        this.moveForward();
     }
 
     rotateRight(){
@@ -71,13 +83,15 @@ class Player{
         }
     }
     pickup(){
-        pickup(this.token,objectToken)
-        .then(function (datums) {
-        })
-        .catch(function (err) {
-            console.error('Augh, there was an error!', err.statusText);
-        })
-        
+        if(this.vp > 0){
+            pickup(this.token,objectToken)
+            .then(function (datums) {
+            })
+            .catch(function (err) {
+                console.error('Augh, there was an error!', err.statusText);
+            })
+            this.moveForward();
+        }
         return this;
     }
 
@@ -123,7 +137,13 @@ class Map{
     }
     //Retorna que hi ha a la posicio que li pasem
     getPosInfo(x,y){
-        return this.cuadricula[x][y];
+        if(x < 40 && x >= 0 && y < 40 && y >= 0){
+            return this.cuadricula[x][y];
+        }else{
+
+            return 100;
+
+        }
     }
 
 }
@@ -531,6 +551,9 @@ function selectImage(element){
             //dibuixar un objecte
             pintaVisor('objecte.jpeg');
             break;
+        case 100:
+            pintaVisor('paret.jpeg');
+            break;
         default:
             pintaVisor('enemic.jpeg'); 
             break;
@@ -597,22 +620,22 @@ function getFrontPos(){
     var pos = [];
     switch (player.d) {
         case 'N':
-            pos[0] = player.x;
-            pos[1] = player.y;
+            pos[0] = parseInt(player.x);
+            pos[1] = parseInt(player.y);
             pos[1]++;
             break;
         case 'S':
-            pos[0] = player.x;
+            pos[0] = parseInt(player.x);
             pos[1] = player.y-1;
             break;
         case 'O':
             pos[0] = player.x-1;
-            pos[1] = player.y;
+            pos[1] = parseInt(player.y);
             break;
         case 'E':
-            pos[0] = player.x;
+            pos[0] = parseInt(player.x);
             pos[0]++;
-            pos[1] = player.y;
+            pos[1] = parseInt(player.y);
             break;
         default:
             break;
@@ -631,8 +654,8 @@ function saveToLocal(key,item){
 }
 
 function actualitzaInfo(){
+    //checkEnemies();
     fillMap();
     actualitzaBruixola();
     drawEnemie();
 }
-
