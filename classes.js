@@ -1,3 +1,5 @@
+
+// Classe que serveix per guardar tota la informacio referent al jugador
 class Player{
     constructor(token, name, x, y, d, atac, defense, vp, image, object, delToken){
         this.token = token; 
@@ -11,6 +13,7 @@ class Player{
         this.image = image;
         this.object = object;
         this.delToken = delToken;
+        this.state = 'Alive';
     }
     attack(){
         if(this.vp > 0){
@@ -94,13 +97,17 @@ class Player{
         }
         return this;
     }
+    escape(){
+        for (let i = 0; i < 2; i++) {
+            this.moveForward();
+        }
+    }
 
 }
 
+// Classe que guarda tota la informacio necessaria d'un item
 class Item{
-
     constructor(token, name, attack, defense, imagex,y){
-
         this.token = token;
         this.name = name;
         this.attack = attack;
@@ -108,11 +115,11 @@ class Item{
         this.image = image;
         this.x = x;
         this.y = y;
-
     }
 
 }
 
+// Classe que guarda tota la informació necessaria d'un mapa
 class Map{
     constructor(){
         var cuadricula = new Array(40);
@@ -131,23 +138,18 @@ class Map{
         this.player[0] = 0;
         this.player[1] = 0;
     }
-    // 1 --> enemic, 2--> objecte
-    actualitzaMapa(){
-        actualizeMapa();
-    }
     //Retorna que hi ha a la posicio que li pasem
     getPosInfo(x,y){
         if(x < 40 && x >= 0 && y < 40 && y >= 0){
             return this.cuadricula[x][y];
         }else{
-
             return 100;
-
         }
     }
 
 }
 
+// Classe que guarda tota la informació d'un enemic
 class Enemie{
     constructor(x,y,dir,vp,image){
         this.x = x;
@@ -158,11 +160,7 @@ class Enemie{
     }
 }
 
-//VARIABLES GLOBALS
-var player;
-var map;
-var gm;
-
+// Classe que serveix per inicialitzar la partida i fer el control de les tecles
 class gameManager{
     
     constructor(){
@@ -215,59 +213,16 @@ class gameManager{
 
 }
 
+//Variables globals del joc
+var player;    // Variable que serveix per fer la gestio del player
+var map;       // Variable que serveix per fer la gestio del mapa
+var gm;        // Variable que serveix per fer la gestio de les tecles i iniciar el joc
 
-function actualizePlayer(){
-    getPlayerInfo(player.token)
-    .then(function (datums) {
-      var data = JSON.parse(datums);
-      setPlayerInfo(data);
-    })
-    .catch(function (err) {
-      console.error('Augh, there was an error!', err.statusText);
-    })
-}
-
-function setPlayerInfo(data){
-    player.name = data.name;
-    player.x = data.x;
-    player.y = data.y;
-    player.d = data.direction;
-    player.atac = data.attack;
-    player.defense = data.defense;
-    player.vp = data.vitalpoints;
-    player.image = data.image;
-    player.object = data.object;
-}
-
-function creaJugador(playerName){
-    var player = new Player('','','','','','','','','','');
-    spawnPlayer(playerName)
-    .then(function (datums) {
-      var data = JSON.parse(datums);
-      player.token = data.token;
-      getPlayerInfo(player.token)
-      .then(function (datums) {
-        var data = JSON.parse(datums);
-        player.name = data.name;
-        player.x = data.x;
-        player.y = data.y;
-        player.d = data.direction;
-        player.atac = data.attack;
-        player.defense = data.defense;
-        player.vp = data.vitalpoints;
-        player.image = data.image;
-        player.object = data.object;
-      })
-      .catch(function (err) {
-        console.error('Augh, there was an error!', err.statusText);
-      })
-    })
-    .catch(function (err) {
-      console.error('Augh, there was an error!', err.statusText);
-    })
-    return player;
-}
-
+/**
+ * Summary: Funcio que serveix per inicialitzar el joc
+ * Inicialitzem el gameManager i creem la partida
+ * Inicialitzem els audios
+ */
 function startGame(){
     gm = new gameManager();
     gm.startGame('Player-Grup33');
@@ -277,21 +232,16 @@ function startGame(){
     var ambientAudio = new Audio('resources/ambient.mp3');
     ambientAudio.volume = 0.5;
     ambientAudio.play();
-    ambientAudio.loop = true;
-    
+    ambientAudio.loop = true;  
+    $("#startB").hide();
+    $("#reviveB").show();
+    $("#deleteB").show();
 }
 
-function deleteUser(){
-    removePlayer(player.token,player.delToken)
-    .then(function (datums) {
-        var data = JSON.parse(datums);
-      })
-      .catch(function (err) {
-        console.error('Augh, there was an error!', err.statusText);
-      })
-}
-
-//Fa una peticio a la API per crear un usuari
+/**
+ * Summary: Funcio que fa una peticio a la API de forma sincrona per crear un jugador
+ * @param {*} name //Nom del jugador 
+ */
 function createUser(name){
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://battlearena.danielamo.info/api/spawn/b89f987e/'+name,false);
@@ -302,7 +252,10 @@ function createUser(name){
     player.delToken = data.code;
     return player;
 }
-//Fa una peticio a la API per omplenar un usuari
+/**
+ * Summary: Funcio que fa una peticio a la API de forma sincrona per omplenar un jugador
+ * @param {*} token //Token idetificatiu del jugador 
+ */
 function fillUser(token){
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://battlearena.danielamo.info/api/player/b89f987e/'+token,false);
@@ -318,20 +271,92 @@ function fillUser(token){
     player.image = data.image;
     player.object = data.object;
 }
-//Fa una peticio a la API per omplenar el mapa
+
+/**
+ * Summary: Funcio que crida a la API de froma asincrona per eliminarlo 
+ */
+function deleteUser(){
+    removePlayer(player.token,player.delToken)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+    })
+    .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+    })
+}
+
+function respawnUser(){
+    respawnPlayer(player.token)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+    })
+    .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+    })
+}
+
+/**
+ * Summary: Funcio que actualitza el jugador de forma asincrona 
+ */
+function actualizePlayer(){
+    getPlayerInfo(player.token)
+    .then(function (datums) {
+      var data = JSON.parse(datums);
+      setPlayerInfo(data);
+    })
+    .catch(function (err) {
+      console.error('Augh, there was an error!', err.statusText);
+    })
+}
+
+/**
+ * Summary: Funcio que rep les dades de l'API i omplena el jugador amb elles
+ * @param {*} data 
+ */
+function setPlayerInfo(data){
+    player.name = data.name;
+    player.x = data.x;
+    player.y = data.y;
+    player.d = data.direction;
+    player.atac = data.attack;
+    player.defense = data.defense;
+    player.vp = data.vitalpoints;
+    player.image = data.image;
+    player.object = data.object;
+    if(player.vp <= 0){
+        player.state = 'Dead';
+    }else{
+        player.state = 'Alive';
+    }
+}
+
+/**
+ * Summary: Funcio que omplena el mapa de forma asincrona amb la informacio procedent de la API
+ */
 function fillMap(){
+    // Reset del mapa
     for (let i = 0; i < 40; i++) {
         for (let j = 0; j < 40; j++) {
             map.cuadricula[i][j] = 0;
         }
     }
+    //Crida a la API per omplear el mapa
     getMapInfo(player.token)
     .then(function (datums) {
         var data = JSON.parse(datums);
+        // Omplenem l'array d'enemics de la classe map 
         for (let i = 0; i < data.enemies.length; i++) {
           var enemie = new Enemie(data.enemies[i].x,data.enemies[i].y,data.enemies[i].direction,0,0);
           map.enemies.push(enemie);
         }
+        //RETOCAR(No hem probat mai un objecte)
+        // Omplenem l'array d'objectes de la classe map
+        /*for (let i = 0; i < data.objects.length; i++) {
+            var object = new Item(data.objects[i].x,data.objects[i].y);
+            map.objects.push(object);
+        }
+        */
+        //Segons la direccio d'un enemic posem un valor a cada casella
         for (let i = 0; i < map.enemies.length; i++) {
             let rotation = 0;
             let posibleDir = ['O','N','E','S'];
@@ -342,7 +367,8 @@ function fillMap(){
             }
             map.cuadricula[map.enemies[i].x][map.enemies[i].y] = 4 + rotation;
         }
-  
+        
+        //Si es un objecte es un 2
         for (let i = 0; i < map.objects.length; i++) {
           map.cuadricula[map.objects[i].x][map.objects[i].y] = 2;
         }
@@ -350,6 +376,8 @@ function fillMap(){
         map.player[0] = player.x;
         map.player[1] = player.y;
         map.cuadricula[map.player[0]][map.player[1]] = 3;
+
+        //Un cop tenim la informacio necessaria dibuixem el mapa i dibuixem la vista
         drawMap();
         drawView();
     })
@@ -358,18 +386,21 @@ function fillMap(){
     })
     
 }
-//Draw player info
+
+/**
+ * Summary: Dibuixa per pantalla la informacio del jugadr
+ */
 function drawPlayerInfo(){
-    document.getElementById("name").innerHTML = "Name "+player.name;
-    document.getElementById("vida").innerHTML = "Vida "+player.vp;
-    document.getElementById("attack").innerHTML = "Attack "+player.atac;
-    document.getElementById("defense").innerHTML = "Defense "+player.defense;
+    document.getElementById("name").innerHTML = ""+player.name;
+    document.getElementById("vida").innerHTML = ""+player.vp;
+    document.getElementById("attack").innerHTML = ""+player.atac;
+    document.getElementById("defense").innerHTML = ""+player.defense;
+    document.getElementById("state").innerHTML = ""+player.state;
 }
 
-function getObjectInFront(){
-
-}
-//Dibuixa el mapa a la interficie grafica
+/**
+ * Summary: Dibuixa el mapa per pantalla
+ */
 function drawMap(){
     var canvas = document.getElementById('minimap');
     var context = canvas.getContext('2d');
@@ -486,6 +517,9 @@ function drawMap(){
     }
 }
 
+/** 
+ * Summary: Funcio que serveix per dibuixar un triangle al mapa per referenciar el enemic
+*/
 function drawTriangle (color, direction, x, y, stroke){
 
     context.beginPath();
@@ -500,7 +534,9 @@ function drawTriangle (color, direction, x, y, stroke){
     context.fill();
 
 }
-//Dibuixa el visor a la interficie grafica
+/**
+ * Summary: Funcio que serveix per dibuixar la vista del jugador segons la seva direccio
+ */
 function drawView(){
     switch (player.d) {
         case "N":
@@ -538,28 +574,34 @@ function drawView(){
             break;
     }
 }
-//Seleciona la imatge a mostrar
+/**
+ * Summary: Funcio que serveix per seleccionar la imatga a mostrar segons l'element que tens devant
+ * @param {*} element 
+ */
 function selectImage(element){
     switch (element) {
         case 0:
+            //dibuixa cami
             pintaVisor('cami.jpeg');
-            break;
-        case 1:
-            
             break;
         case 2:
             //dibuixar un objecte
             pintaVisor('objecte.jpeg');
             break;
         case 100:
+            //dibuixa paret
             pintaVisor('paret.jpeg');
             break;
         default:
+            //en qualsevol altre cas dibuixa enemic
             pintaVisor('enemic.jpeg'); 
             break;
     }
 }
-//Funcio per pintar el visor
+/**
+ * Summary: Funcio que pinta la imatge al canvas de visor
+ * @param {*} url //Nom de la imatge per poder trobarle a la carpeta resources
+ */
 function pintaVisor(url){
     var canvas = document.getElementById('navigation');
     var context = canvas.getContext('2d');
@@ -569,7 +611,9 @@ function pintaVisor(url){
         context.drawImage(this, 0, 0);
     }
 }
-//actualitza la bruixola
+/**
+ * Summary: Funcio que serveix per actualitzar la bruixola en cas de que el player canvii de direccio
+ */
 function actualitzaBruixola(){
     var canvas = document.getElementById('compass');
     var context = canvas.getContext('2d');
@@ -596,13 +640,17 @@ function actualitzaBruixola(){
         context.drawImage(this, 0, 0,300,300);
     }
 }
+/**
+ * Funcio que serveix per pintar per pantalla la informacio del enemic que tens devant a la consola d'informacio
+ */
 function drawEnemie(){
     getNearPlayers(player.token)
     .then(function (datums) {
         var data = JSON.parse(datums);
         var enemies = data.enemies;
+        var objects = data.objects;
         var pos = getFrontPos();
-
+        
         for (let i = 0; i < enemies.length; i++) {
             if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
                 console.log(enemies[i]);
@@ -616,6 +664,9 @@ function drawEnemie(){
         console.error('Augh, there was an error!', err.statusText);
     })  
 }
+/**
+ * Summary: Funcio que retorna la posicio que el jugador te devant segons la seva direccio
+ */
 function getFrontPos(){
     var pos = [];
     switch (player.d) {
@@ -643,6 +694,11 @@ function getFrontPos(){
     return pos;
 }
 
+/**
+ * Summary: Funcio que serveix per guardar en local informacio del jugador
+ * @param {*} key 
+ * @param {*} item 
+ */
 function saveToLocal(key,item){
     if (localStorage.getItem(key) === null) {
         localStorage.setItem(key,item);
@@ -652,10 +708,21 @@ function saveToLocal(key,item){
         localStorage.setItem(key,value);
     }
 }
-
+/**
+ * Summary: Funcio que actualitza el joc de forma periodica
+ */
 function actualitzaInfo(){
-    //checkEnemies();
     fillMap();
     actualitzaBruixola();
     drawEnemie();
+    actualizePlayer();
 }
+
+/**
+ * Summary: Funcio que amaga elements el iniciar el joc
+ */
+window.onload = function() {
+    $("#startB").show();
+    $("#reviveB").hide();
+    $("#deleteB").hide();
+};
