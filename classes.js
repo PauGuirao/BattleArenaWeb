@@ -41,16 +41,19 @@ class Player{
 
     moveBackwards(){
         var posibleDir = ['N','E','S','O','N','E'];
-        for (let i = 0; i < posibleDir.length; i++) {
-            if(posibleDir[i] == this.d){
-                movePlayer(this.token, posibleDir[i+2])
-                .then(function (datums) {
-                    actualizePlayer();
-                })
-                .catch(function (err) {
-                    console.error('Augh, there was an error!', err.statusText);
-                })
-                break;
+        var checkPos = getFrontPos();
+        if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
+            for (let i = 0; i < posibleDir.length; i++) {
+                if(posibleDir[i] == this.d){
+                    movePlayer(this.token, posibleDir[i+2])
+                    .then(function (datums) {
+                        actualizePlayer();
+                    })
+                    .catch(function (err) {
+                        console.error('Augh, there was an error!', err.statusText);
+                    })
+                    break;
+                }
             }
         }
     }
