@@ -13,14 +13,16 @@ class Player{
         this.delToken = delToken;
     }
     attack(){
-        attack(this.token,this.d)
-        .then(function (datums) {
-            var data = JSON.parse(datums);
-            console.log(data);
-        })
-        .catch(function (err) {
-            console.error('Augh, there was an error!', err.statusText);
-        })        
+        if(this.vp > 0){
+            attack(this.token,this.d)
+            .then(function (datums) {
+                var data = JSON.parse(datums);
+                console.log(data);
+            })
+            .catch(function (err) {
+               console.error('Augh, there was an error!', err.statusText);
+            })
+        }        
     }
 
     moveForward(){
@@ -38,11 +40,16 @@ class Player{
         var posibleDir = ['N','E','S','O','N','E'];
         for (let i = 0; i < posibleDir.length; i++) {
             if(posibleDir[i] == this.d){
-                this.d = posibleDir[i+2];
+                movePlayer(this.token, posibleDir[i+2])
+                .then(function (datums) {
+                    actualizePlayer();
+                })
+                .catch(function (err) {
+                    console.error('Augh, there was an error!', err.statusText);
+                })
                 break;
             }
         }
-        this.moveForward();
     }
 
     rotateRight(){
@@ -65,13 +72,15 @@ class Player{
         }
     }
     pickup(){
-        pickup(this.token,objectToken)
-        .then(function (datums) {
-        })
-        .catch(function (err) {
-            console.error('Augh, there was an error!', err.statusText);
-        })
-        this.moveForward();
+        if(this.vp > 0){
+            pickup(this.token,objectToken)
+            .then(function (datums) {
+            })
+            .catch(function (err) {
+                console.error('Augh, there was an error!', err.statusText);
+            })
+            this.moveForward();
+        }
         return this;
     }
 
@@ -117,7 +126,13 @@ class Map{
     }
     //Retorna que hi ha a la posicio que li pasem
     getPosInfo(x,y){
-        return this.cuadricula[x][y];
+        if(x < 40 && x > 0 && y < 40 && y > 0){
+            return this.cuadricula[x][y];
+        }else{
+
+            return 100;
+
+        }
     }
 
 }
@@ -513,6 +528,9 @@ function selectImage(element){
             //dibuixar un objecte
             pintaVisor('objecte.jpeg');
             break;
+        case 100:
+            pintaVisor('paret.jpeg');
+            break;
         default:
             pintaVisor('enemic.jpeg'); 
             break;
@@ -602,9 +620,31 @@ function getFrontPos(){
     return pos;
 }
 
+/**
+function checkEnemies(){
+
+    for(let i = 0; i < map.enemies.length; i++){
+
+        if(map.enemies[i].vitalpoints <= 0){
+
+            delete(map.enemies[i]);
+
+            for(let j = i + 1; j < map.enemies.length; j++){
+
+                map.enemies[j - 1] = map.enemies[j];
+
+            }
+
+        }
+
+    }
+
+}
+*/
+
 function actualitzaInfo(){
+    //checkEnemies();
     fillMap();
     actualitzaBruixola();
     drawEnemie();
 }
-
