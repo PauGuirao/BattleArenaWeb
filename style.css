@@ -104,6 +104,15 @@
   .row{
     border: 10px solid transparent;
   }
+  .border{
+    border-color: red;
+    border: 10px solid;
+    background-color: black;
+  }
+
+  .compass{
+    max-width: 200px;
+  }
 
   .card-header{
     background-color: #c38d60;
