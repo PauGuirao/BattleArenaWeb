@@ -715,7 +715,7 @@ function actualitzaInfo(){
     fillMap();
     actualitzaBruixola();
     drawEnemie();
-    actualizePlayer();
+    //actualizePlayer();
 }
 
 /**
