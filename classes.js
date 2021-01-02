@@ -26,13 +26,16 @@ class Player{
     }
 
     moveForward(){
-        movePlayer(this.token,this.d)
-        .then(function (datums) {
-            actualizePlayer();
-        })
-        .catch(function (err) {
-            console.error('Augh, there was an error!', err.statusText);
-        })
+        var checkPos = getFrontPos();
+        if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
+            movePlayer(this.token,this.d)
+            .then(function (datums) {
+                actualizePlayer();
+            })
+            .catch(function (err) {
+                console.error('Augh, there was an error!', err.statusText);
+            })
+        }
         
     }
 
@@ -126,7 +129,7 @@ class Map{
     }
     //Retorna que hi ha a la posicio que li pasem
     getPosInfo(x,y){
-        if(x < 40 && x > 0 && y < 40 && y > 0){
+        if(x < 40 && x >= 0 && y < 40 && y >= 0){
             return this.cuadricula[x][y];
         }else{
 
@@ -597,22 +600,22 @@ function getFrontPos(){
     var pos = [];
     switch (player.d) {
         case 'N':
-            pos[0] = player.x;
-            pos[1] = player.y;
+            pos[0] = parseInt(player.x);
+            pos[1] = parseInt(player.y);
             pos[1]++;
             break;
         case 'S':
-            pos[0] = player.x;
+            pos[0] = parseInt(player.x);
             pos[1] = player.y-1;
             break;
         case 'O':
             pos[0] = player.x-1;
-            pos[1] = player.y;
+            pos[1] = parseInt(player.y);
             break;
         case 'E':
-            pos[0] = player.x;
+            pos[0] = parseInt(player.x);
             pos[0]++;
-            pos[1] = player.y;
+            pos[1] = parseInt(player.y);
             break;
         default:
             break;
