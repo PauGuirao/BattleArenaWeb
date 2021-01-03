@@ -1,4 +1,5 @@
 
+
 // Classe que serveix per guardar tota la informacio referent al jugador
 class Player{
     constructor(token, name, x, y, d, atac, defense, vp, image, object, delToken){
@@ -173,7 +174,7 @@ class gameManager{
         map = new Map();
         drawPlayerInfo();
         setInterval(document.onkeydown = this.checkKeys, 2000);
-        setInterval(actualitzaInfo,2000);
+        setInterval(function() {fillMap(); actualitzaBruixola(); drawEnemie();},2000);
     }
 
     checkKeys(e){
@@ -579,24 +580,27 @@ function drawView(){
  * @param {*} element 
  */
 function selectImage(element){
+    var url = '';
     switch (element) {
         case 0:
             //dibuixa cami
-            pintaVisor('cami.jpeg');
+            url = 'cami.jpeg';
             break;
         case 2:
             //dibuixar un objecte
-            pintaVisor('objecte.jpeg');
+            url = 'objecte.jpeg';
             break;
         case 100:
             //dibuixa paret
-            pintaVisor('paret.jpeg');
+            url = 'paret.jpeg';
             break;
         default:
             //en qualsevol altre cas dibuixa enemic
-            pintaVisor('enemic.jpeg'); 
+            url = 'enemic.jpeg';
             break;
     }
+
+    drawVisor(pintaVisor, url);
 }
 /**
  * Summary: Funcio que pinta la imatge al canvas de visor
@@ -694,6 +698,12 @@ function getFrontPos(){
     return pos;
 }
 
+function drawVisor(callback, url){
+
+    callback(url);
+
+}
+
 /**
  * Summary: Funcio que serveix per guardar en local informacio del jugador
  * @param {*} key 
@@ -711,12 +721,14 @@ function saveToLocal(key,item){
 /**
  * Summary: Funcio que actualitza el joc de forma periodica
  */
+/**
 function actualitzaInfo(){
     fillMap();
     actualitzaBruixola();
     drawEnemie();
     //actualizePlayer();
 }
+*/
 
 /**
  * Summary: Funcio que amaga elements el iniciar el joc
