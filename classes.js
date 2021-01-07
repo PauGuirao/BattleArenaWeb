@@ -224,18 +224,24 @@ var gm;        // Variable que serveix per fer la gestio de les tecles i iniciar
  * Inicialitzem els audios
  */
 function startGame(){
-    gm = new gameManager();
-    gm.startGame('Player-Grup33');
-    saveToLocal('PartidesTotals',1);
-    var start_Audio = new Audio('resources/startSound.wav');
-    start_Audio.play();
-    var ambientAudio = new Audio('resources/ambient.mp3');
-    ambientAudio.volume = 0.5;
-    ambientAudio.play();
-    ambientAudio.loop = true;  
-    $("#startB").hide();
-    $("#reviveB").show();
-    $("#deleteB").show();
+    var player = document.getElementById("player"); 
+    if (player.value == ""){
+        alert("Player name is missing!"); //Alerta per pantalla en cas que es vulgui començar sense posar el nom del jugador 
+        player.focus(); //Ens indicarà on ens hem de col·locar en la pàgina
+    } else {
+        gm = new gameManager();
+        gm.startGame(player.value);
+        saveToLocal('PartidesTotals',1);
+        var start_Audio = new Audio('resources/startSound.wav');
+        start_Audio.play();
+        var ambientAudio = new Audio('resources/ambient.mp3');
+        ambientAudio.volume = 0.5;
+        ambientAudio.play();
+        ambientAudio.loop = true;  
+        $("#startB").hide();
+        $("#reviveB").show();
+        $("#deleteB").show();
+    }
 }
 
 /**
@@ -278,6 +284,7 @@ function fillUser(token){
 function deleteUser(){
     removePlayer(player.token,player.delToken)
     .then(function (datums) {
+
         console.log("Ey, he esborrat el jugador");
         location.reload();
         
@@ -424,6 +431,13 @@ function drawMap(){
                 context.beginPath();
                 context.lineWidth = "1";
                 context.strokeStyle = "brown";
+                context.rect(i*8, j*8, 8, 8);
+                context.stroke();
+            }
+            if(map.cuadricula[i][j] == 2){
+                context.beginPath();
+                context.lineWidth = "1";
+                context.strokeStyle = "yellow";
                 context.rect(i*8, j*8, 8, 8);
                 context.stroke();
             }

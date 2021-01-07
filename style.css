@@ -73,6 +73,7 @@
     color: white;
     text-transform: uppercase;
     font-family: "Dalelands";
+    font-size: 24px;
   }
 
   #logo{
@@ -111,11 +112,17 @@
   }
 
   .compass{
-    max-width: 200px;
+    max-height: 270px;
+  }
+  canvas{
+    margin-top: 10px;
+  }
+  .extra{
+    font-size: 15px;
   }
 
   .card-header{
-    background-color: #c38d60;
+    background-color: #7a4b24;
     color: white;
     font-family: "Dalelands regular";
     text-transform: uppercase;
@@ -127,3 +134,16 @@
     font-family: "Dalelands regular";
   }
 
+  #deleteB{
+    background-color: rgb(204, 42, 42);
+  }
+
+.icono{
+  max-width: 35px;
+}
+.flex{
+  display: inline;
+}
+.console{
+  font-size: 15px;
+}
