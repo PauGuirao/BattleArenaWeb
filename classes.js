@@ -225,18 +225,24 @@ var gm;        // Variable que serveix per fer la gestio de les tecles i iniciar
  * Inicialitzem els audios
  */
 function startGame(){
-    gm = new gameManager();
-    gm.startGame('Player-Grup33');
-    saveToLocal('PartidesTotals',1);
-    var start_Audio = new Audio('resources/startSound.wav');
-    start_Audio.play();
-    var ambientAudio = new Audio('resources/ambient.mp3');
-    ambientAudio.volume = 0.5;
-    ambientAudio.play();
-    ambientAudio.loop = true;  
-    $("#startB").hide();
-    $("#reviveB").show();
-    $("#deleteB").show();
+    var player = document.getElementById("player"); 
+    if (player.value == ""){
+        alert("Player name is missing!"); //Alerta per pantalla en cas que es vulgui començar sense posar el nom del jugador 
+        player.focus(); //Ens indicarà on ens hem de col·locar en la pàgina
+    } else {
+        gm = new gameManager();
+        gm.startGame(player.value);
+        saveToLocal('PartidesTotals',1);
+        var start_Audio = new Audio('resources/startSound.wav');
+        start_Audio.play();
+        var ambientAudio = new Audio('resources/ambient.mp3');
+        ambientAudio.volume = 0.5;
+        ambientAudio.play();
+        ambientAudio.loop = true;  
+        $("#startB").hide();
+        $("#reviveB").show();
+        $("#deleteB").show();
+    }
 }
 
 /**
@@ -454,9 +460,9 @@ function drawMap(){
                 }
 
                 if (rotation == 1){
-                    context.moveTo(i * 8 + 4, j * 8 + 1);
-                    context.lineTo(i * 8 + 7, j * 8 + 7);
-                    context.lineTo(i * 8 + 1, j * 8 + 7);
+                    context.moveTo(i * 8 + 4, j * 8 + 7);
+                    context.lineTo(i * 8 + 7, j * 8 + 1);
+                    context.lineTo(i * 8 + 1, j * 8 + 1);
                 }
 
                 if (rotation == 2){
@@ -466,9 +472,9 @@ function drawMap(){
                 }
 
                 if (rotation == 3){
-                    context.moveTo(i * 8 + 4, j * 8 + 7);
-                    context.lineTo(i * 8 + 7, j * 8 + 1);
-                    context.lineTo(i * 8 + 1, j * 8 + 1);
+                    context.moveTo(i * 8 + 4, j * 8 + 1);
+                    context.lineTo(i * 8 + 7, j * 8 + 7);
+                    context.lineTo(i * 8 + 1, j * 8 + 7);
                 }
 
                 context.closePath();
@@ -646,10 +652,10 @@ function actualitzaBruixola(){
     
     switch (player.d) {
         case 'N':
-            base_image.src = "resources/N.png";
+            base_image.src = "resources/S.png";
             break;
         case 'S':
-            base_image.src = "resources/S.png";
+            base_image.src = "resources/N.png";
             break;
         case 'E':
             base_image.src = "resources/E.png";
