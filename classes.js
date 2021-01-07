@@ -18,18 +18,18 @@ class Player{
     }
     attack(){
         if(this.vp > 0){
-            attack(this.token,this.d)
-            .then(function (datums) {
-                var data = JSON.parse(datums);
-                localStorage.setItem('Damage',data);
-                document.getElementById("atacEnemic").innerHTML = "Li has tret "+data+" de vida!";
-                var audio = new Audio('resources/attack.wav');
-                audio.play();
-                console.log(data);
-            })
-            .catch(function (err) {
-               console.error('Augh, there was an error!', err.statusText);
-            })
+                attack(this.token,this.d)
+                .then(function (datums) {
+                    var data = JSON.parse(datums);
+                    localStorage.setItem('DamageTotal',data);
+                    document.getElementById("atacEnemic").innerHTML = "Li has tret "+data+" de vida!";
+                    var audio = new Audio('resources/attack.wav');
+                    audio.play();
+                    detectKill();
+                })
+                .catch(function (err) {
+                    console.error('Augh, there was an error!', err.statusText);
+                }) 
         }        
     }
 
@@ -108,7 +108,7 @@ class Player{
 
 // Classe que guarda tota la informacio necessaria d'un item
 class Item{
-    constructor(token, name, attack, defense, imagex,y){
+    constructor(token, name, attack, defense, image,x,y){
         this.token = token;
         this.name = name;
         this.attack = attack;
@@ -227,7 +227,7 @@ var gm;        // Variable que serveix per fer la gestio de les tecles i iniciar
 function startGame(){
     gm = new gameManager();
     gm.startGame('Player-Grup33');
-    saveToLocal('Times',1);
+    saveToLocal('PartidesTotals',1);
     var start_Audio = new Audio('resources/startSound.wav');
     start_Audio.play();
     var ambientAudio = new Audio('resources/ambient.mp3');
@@ -279,7 +279,7 @@ function fillUser(token){
 function deleteUser(){
     removePlayer(player.token,player.delToken)
     .then(function (datums) {
-        var data = JSON.parse(datums);
+        
     })
     .catch(function (err) {
         console.error('Augh, there was an error!', err.statusText);
@@ -289,7 +289,7 @@ function deleteUser(){
 function respawnUser(){
     respawnPlayer(player.token)
     .then(function (datums) {
-        var data = JSON.parse(datums);
+        actualizePlayer();
     })
     .catch(function (err) {
         console.error('Augh, there was an error!', err.statusText);
@@ -325,10 +325,15 @@ function setPlayerInfo(data){
     player.image = data.image;
     player.object = data.object;
     if(player.vp <= 0){
+        //Detectem si es el primer cop que esta mort
+        if(player.state == 'Alive'){
+            saveToLocal('MortsTotals',1);
+        }
         player.state = 'Dead';
     }else{
         player.state = 'Alive';
     }
+    drawPlayerInfo();
 }
 
 /**
@@ -352,11 +357,11 @@ function fillMap(){
         }
         //RETOCAR(No hem probat mai un objecte)
         // Omplenem l'array d'objectes de la classe map
-        /*for (let i = 0; i < data.objects.length; i++) {
-            var object = new Item(data.objects[i].x,data.objects[i].y);
+        for (let i = 0; i < data.objects.length; i++) {
+            var object = new Item('','','','','',data.objects[i].x,data.objects[i].y);
             map.objects.push(object);
         }
-        */
+        
         //Segons la direccio d'un enemic posem un valor a cada casella
         for (let i = 0; i < map.enemies.length; i++) {
             let rotation = 0;
@@ -371,7 +376,7 @@ function fillMap(){
         
         //Si es un objecte es un 2
         for (let i = 0; i < map.objects.length; i++) {
-          map.cuadricula[map.objects[i].x][map.objects[i].y] = 2;
+            map.cuadricula[map.objects[i].x][map.objects[i].y] = 2;
         }
   
         map.player[0] = player.x;
@@ -397,6 +402,11 @@ function drawPlayerInfo(){
     document.getElementById("attack").innerHTML = ""+player.atac;
     document.getElementById("defense").innerHTML = ""+player.defense;
     document.getElementById("state").innerHTML = ""+player.state;
+
+    document.getElementById("pt").innerHTML = ""+localStorage.getItem('PartidesTotals');
+    document.getElementById("dt").innerHTML = ""+localStorage.getItem('DamageTotal');
+    document.getElementById("kt").innerHTML = ""+localStorage.getItem('KillsTotals');
+    document.getElementById("mt").innerHTML = ""+localStorage.getItem('MortsTotals');
 }
 
 /**
@@ -641,7 +651,7 @@ function actualitzaBruixola(){
             break;
     }
     base_image.onload = function () {
-        context.drawImage(this, 0, 0,300,300);
+        context.drawImage(this, 0, 0,150,150);
     }
 }
 /**
@@ -667,6 +677,53 @@ function drawEnemie(){
     .catch(function (err) {
         console.error('Augh, there was an error!', err.statusText);
     })  
+}
+/**
+ * Summary: Funcio que detecta si tens un objecte devant
+ */
+function detectObject(){
+    getNearPlayers(player.token)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+        var objects = data.objects;
+        var pos = getFrontPos();
+        
+        for (let i = 0; i < objects.length; i++) {
+            if(objects[i].x == pos[0] && objects[i].y == pos[1]){
+                return true;
+            }
+        }
+        return false;
+    })
+    .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+    }) 
+}
+/**
+ * Summary: Funcio que serveix per detectar si has matat a un enemic
+ */
+function detectKill(){
+    getNearPlayers(player.token)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+        var enemies = data.enemies;
+        var pos = getFrontPos();
+        
+        for (let i = 0; i < enemies.length; i++) {
+            if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
+                
+                if(enemies[i].vitalpoints <= 0){
+                    localStorage.setItem('KillsTotals',1);
+                    console.log('Has matat');
+                    break;
+                }
+                
+            }
+        }
+    })
+    .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+    }) 
 }
 /**
  * Summary: Funcio que retorna la posicio que el jugador te devant segons la seva direccio
@@ -714,9 +771,11 @@ function saveToLocal(key,item){
         localStorage.setItem(key,item);
     }else{
         var value = localStorage.getItem(key);
-        value += item;
-        localStorage.setItem(key,value);
+        var num = parseInt(value);
+        num += item;
+        localStorage.setItem(key,num);
     }
+    console.log(value);
 }
 /**
  * Summary: Funcio que actualitza el joc de forma periodica

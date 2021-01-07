@@ -56,10 +56,18 @@
                 <div class="col">
                     <!-- Compass-->
                     <div class="row compass">
-                        <div class="card-header">
-                            Compass
+                        <div class="col-6">
+                            <div class="card-header">
+                                Compass
+                            </div>
+                            <canvas id="compass" width="180" height="180"></canvas>
                         </div>
-                        <canvas id="compass" width="312" height="312"></canvas>
+                        <div class="col-6">
+                            <div class="card-header">
+                                Object
+                            </div>
+                            <canvas id="object" width="180" height="180"></canvas>
+                        </div>
                     </div>
                     <!-- /Compass-->
 
@@ -104,13 +112,32 @@
                               </ul>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="card-header">
-                            Objects
+                            Extra Info
                         </div>
-                        <canvas id="object" width="312" height="312"></canvas>
+                        <div class="col">
+                            <ul class="list-group list-group-flush">
+                                <li class="row">
+                                    <div class="col">
+                                        <p id="pt" class="extra">Partides Totals: 0</p>
+                                    </div>
+                                    <div class="col">
+                                        <p id="dt" class="extra">Total damage: 0</p>
+                                    </div>   
+                                </li>
+                                <li class="row">
+                                    <div class="col">
+                                        <p id="kt" class="extra">Kills totals: 0</p>
+                                    </div>
+                                    <div class="col">
+                                        <p id="mt" class="extra">Morts totals: 0</p>
+                                    </div>   
+                                </li>
+                              </ul>
+                        </div>
                     </div>
+                    
                     <!-- /Player's Info-->
 
                 </div>

@@ -112,7 +112,13 @@
   }
 
   .compass{
-    max-width: 170px;
+    max-height: 270px;
+  }
+  canvas{
+    margin-top: 10px;
+  }
+  .extra{
+    font-size: 15px;
   }
 
   .card-header{
