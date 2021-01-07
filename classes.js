@@ -1,5 +1,4 @@
 
-
 // Classe que serveix per guardar tota la informacio referent al jugador
 class Player{
     constructor(token, name, x, y, d, atac, defense, vp, image, object, delToken){
