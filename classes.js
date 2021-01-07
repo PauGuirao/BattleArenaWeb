@@ -279,6 +279,9 @@ function fillUser(token){
 function deleteUser(){
     removePlayer(player.token,player.delToken)
     .then(function (datums) {
+
+        console.log("Ey, he esborrat el jugador");
+        location.reload();
         
     })
     .catch(function (err) {
@@ -423,6 +426,13 @@ function drawMap(){
                 context.beginPath();
                 context.lineWidth = "1";
                 context.strokeStyle = "brown";
+                context.rect(i*8, j*8, 8, 8);
+                context.stroke();
+            }
+            if(map.cuadricula[i][j] == 2){
+                context.beginPath();
+                context.lineWidth = "1";
+                context.strokeStyle = "yellow";
                 context.rect(i*8, j*8, 8, 8);
                 context.stroke();
             }

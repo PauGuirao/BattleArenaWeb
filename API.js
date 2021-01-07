@@ -193,38 +193,29 @@ function attack(playerToken,direction) {
 }
 
 function craft(playerToken,nom,url,attack,defense) {
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken);
-      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xhr.onload = function () {
-        if (this.status >= 200 && this.status < 300) {
-          resolve(xhr.response);
-        } else {
-          reject({
-            status: this.status,
-            statusText: xhr.statusText
-          });
-        }
-      };
-      xhr.onerror = function () {
-        reject({
-          status: this.status,
-          statusText: xhr.statusText
-        });
-      };
-      xhr.send(JSON.stringify({ "name": nom, "image": url, "attack": attack, "defense": defense }));
+    postData('http://battlearena.danielamo.info/api/craft/b89f987e/'+playerToken, { name: 'Llana', image: 'https://minecraft.gamepedia.com/File:White_Wool_JE2_BE2.png', attack: 10, defense: 10 })
+    .then(data => {
+      console.log('Hola');
     });
 }
-function crafter(token,nom,atac,defensa)
-{
-    var xhr = new XMLHttpRequest();
-    var url = "https://www.google.com/search?q=wool+minecraft&rlz=1C1CHBF_esES921ES921&sxsrf=ALeKk02BIu4TCH7f5AD4rH2HJBoLjKqljA:1609416797700&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjtsZbkmPjtAhWiQUEAHfiaARIQ_AUoAXoECAEQAw&biw=1280&bih=578#imgrc=0hLE1pMuBt6CNM";
-    xhr.open('POST', 'http://battlearena.danielamo.info/api/craft/b89f987e/'+token,false);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.send(JSON.stringify({ "name": nom, "image": url, "attack": atac, "defense": defensa }));
-    return xhr.status;
-} 
+
+async function postData(url = '', data = {}) {
+  // Opciones por defecto estan marcadas con un *
+  const response = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'no-cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+  //return response.json(); // parses JSON response into native JavaScript objects
+}
 
 function pickup(playerToken,objectToken) {
   return new Promise(function (resolve, reject) {
