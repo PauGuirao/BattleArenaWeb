@@ -1,5 +1,3 @@
-
-
 // Classe que serveix per guardar tota la informacio referent al jugador
 class Player{
     constructor(token, name, x, y, d, atac, defense, vp, image, object, delToken){
@@ -175,6 +173,7 @@ class gameManager{
         drawPlayerInfo();
         setInterval(document.onkeydown = this.checkKeys, 2000);
         setInterval(function() {fillMap(); actualitzaBruixola(); drawEnemie();},2000);
+        
     }
 
     checkKeys(e){
@@ -225,18 +224,25 @@ var gm;        // Variable que serveix per fer la gestio de les tecles i iniciar
  * Inicialitzem els audios
  */
 function startGame(){
-    gm = new gameManager();
-    gm.startGame('Player-Grup33');
-    saveToLocal('PartidesTotals',1);
-    var start_Audio = new Audio('resources/startSound.wav');
-    start_Audio.play();
-    var ambientAudio = new Audio('resources/ambient.mp3');
-    ambientAudio.volume = 0.5;
-    ambientAudio.play();
-    ambientAudio.loop = true;  
-    $("#startB").hide();
-    $("#reviveB").show();
-    $("#deleteB").show();
+
+    var player = document.getElementById("player"); 
+        if (player.value == ""){
+             alert("Player's name is missing!"); //Alerta per pantalla en cas que es vulgui començar sense posar el nom del jugador 
+             player.focus(); //Ens indicarà on ens hem de col·locar en la pàgina
+        } else {
+            gm = new gameManager();
+            gm.startGame(player.value);
+            saveToLocal('PartidesTotals',1);
+            var start_Audio = new Audio('resources/startSound.wav');
+            start_Audio.play();
+            var ambientAudio = new Audio('resources/ambient.mp3');
+            ambientAudio.volume = 0.5;
+            ambientAudio.play();
+            ambientAudio.loop = true;  
+            $("#startB").hide();
+            $("#reviveB").show();
+            $("#deleteB").show();
+        }
 }
 
 /**
@@ -797,3 +803,4 @@ window.onload = function() {
     $("#reviveB").hide();
     $("#deleteB").hide();
 };
+
