@@ -227,7 +227,7 @@ function startGame(){
 
     var player = document.getElementById("player"); 
         if (player.value == ""){
-             alert("Player's name is missing!"); //Alerta per pantalla en cas que es vulgui començar sense posar el nom del jugador 
+             alert("Player name is missing!"); //Alerta per pantalla en cas que es vulgui començar sense posar el nom del jugador 
              player.focus(); //Ens indicarà on ens hem de col·locar en la pàgina
         } else {
             gm = new gameManager();
