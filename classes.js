@@ -14,12 +14,13 @@ class Player{
         this.object = object;
         this.delToken = delToken;
         this.state = 'Alive';
+        this.canAttack = true;
     }
     attack(){
         if(this.vp > 0){
             var fPos = getFrontPos();
             checkDeadEnemie();
-            if(map.cuadricula[fPos[0]][fPos[1]] > 3){
+            if(map.cuadricula[fPos[0]][fPos[1]] > 3 && this.canAttack == true){
                 attack(this.token,this.d)
                 .then(function (datums) {
                     var data = JSON.parse(datums);
@@ -32,6 +33,8 @@ class Player{
                 .catch(function (err) {
                     console.error('Augh, there was an error!', err.statusText);
                 }) 
+            }else{
+                document.getElementById("atacEnemic").innerHTML = "";
             }
                 
         }        
@@ -294,7 +297,9 @@ function deleteUser(){
         console.error('Augh, there was an error!', err.statusText);
     })
 }
-
+/**
+ * Summary: Funcio que serveix per respawnejar el player en cas de es mori
+ */
 function respawnUser(){
     respawnPlayer(player.token)
     .then(function (datums) {
@@ -320,7 +325,7 @@ function actualizePlayer(){
 }
 
 /**
- * 
+ * Summary: Funcio que serveix detectar si el player ha estat atacat i hi ha alguna variacio a la seva vida
  * @param {*} data 
  */
 function checkVitals(){
@@ -329,8 +334,11 @@ function checkVitals(){
         var data = JSON.parse(datums);
         player.atac = data.attack;
         player.defense = data.defense;
+        if(player.vp > data.vitalpoints){
+            var audio = new Audio('resources/damage.wav');
+            audio.play();
+        }
         player.vp = data.vitalpoints;
-        console.log(data.vitalpoints);
         player.object = data.object;
     })
     .catch(function (err) {
@@ -702,14 +710,22 @@ function drawEnemie(){
         var enemies = data.enemies;
         var objects = data.objects;
         var pos = getFrontPos();
-        
+        var found = false;
         for (let i = 0; i < enemies.length; i++) {
             if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
                 console.log(enemies[i]);
+                found = true;
                 document.getElementById("showEnemy").src="resources/my_character-"+enemies[i].image+".png";
-                document.getElementById("vidaEnemic").innerHTML = "Ey! tens un enemic devant amb "+enemies[i].vitalpoints+" de vida";
+                if(enemies[i].vitalpoints <= 0){
+                    document.getElementById("vidaEnemic").innerHTML = "Ey! tens un enemic mort devant";
+                }else{
+                    document.getElementById("vidaEnemic").innerHTML = "Ey! tens un enemic devant amb "+enemies[i].vitalpoints+" de vida!";
+                }
                 break;
             }
+        }
+        if(!found){
+            document.getElementById("vidaEnemic").innerHTML = "No tens ningu devant, segueix caminant!";
         }
     })
     .catch(function (err) {
@@ -726,12 +742,14 @@ function checkDeadEnemie(){
         var enemies = data.enemies;
         var pos = getFrontPos();
         
-        
         for (let i = 0; i < enemies.length; i++) {
             if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
                 if(enemies[i].vitalpoints <= 0){
-                    map.cuadricula[enemies[i].x][enemies[i].y] = 0;
+                    player.canAttack = false;
                     break;
+                }else{
+                    player.canAttack = true;
+                    break; 
                 }
             }
         }
