@@ -17,6 +17,9 @@ class Player{
     }
     attack(){
         if(this.vp > 0){
+            var fPos = getFrontPos();
+            checkDeadEnemie();
+            if(map.cuadricula[fPos[0]][fPos[1]] > 3){
                 attack(this.token,this.d)
                 .then(function (datums) {
                     var data = JSON.parse(datums);
@@ -29,9 +32,10 @@ class Player{
                 .catch(function (err) {
                     console.error('Augh, there was an error!', err.statusText);
                 }) 
+            }
+                
         }        
     }
-
     moveForward(){
         var checkPos = getFrontPos();
         if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
@@ -46,7 +50,6 @@ class Player{
             })
         } 
     }
-
     moveBackwards(){
         var posibleDir = ['N','E','S','O','N','E'];
         var checkPos = getFrontPos();
@@ -65,7 +68,6 @@ class Player{
             }
         }
     }
-
     rotateRight(){
         var posibleDir = ['N','E','S','O','N'];
         for (let i = 0; i < posibleDir.length; i++) {
@@ -75,7 +77,6 @@ class Player{
             }
         }
     }
-
     rotateLeft(){
         var posibleDir = ['N','O','S','E','N'];
         for (let i = 0; i < posibleDir.length; i++) {
@@ -102,7 +103,6 @@ class Player{
             this.moveForward();
         }
     }
-
 }
 
 // Classe que guarda tota la informacio necessaria d'un item
@@ -173,7 +173,7 @@ class gameManager{
         map = new Map();
         drawPlayerInfo();
         setInterval(document.onkeydown = this.checkKeys, 2000);
-        setInterval(function() {fillMap(); actualitzaBruixola(); drawEnemie();},2000);
+        setInterval(function() {fillMap(); actualitzaBruixola(); drawEnemie(); checkVitals();},2000);
     }
 
     checkKeys(e){
@@ -239,6 +239,7 @@ function startGame(){
         ambientAudio.play();
         ambientAudio.loop = true;  
         $("#startB").hide();
+        $("#player").hide();
         $("#reviveB").show();
         $("#deleteB").show();
     }
@@ -319,6 +320,25 @@ function actualizePlayer(){
 }
 
 /**
+ * 
+ * @param {*} data 
+ */
+function checkVitals(){
+    getPlayerInfo(player.token)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+        player.atac = data.attack;
+        player.defense = data.defense;
+        player.vp = data.vitalpoints;
+        console.log(data.vitalpoints);
+        player.object = data.object;
+    })
+    .catch(function (err) {
+      console.error('Augh, there was an error!', err.statusText);
+    })
+}
+
+/**
  * Summary: Funcio que rep les dades de l'API i omplena el jugador amb elles
  * @param {*} data 
  */
@@ -359,6 +379,7 @@ function fillMap(){
     .then(function (datums) {
         var data = JSON.parse(datums);
         // Omplenem l'array d'enemics de la classe map 
+        map.enemies = [];
         for (let i = 0; i < data.enemies.length; i++) {
           var enemie = new Enemie(data.enemies[i].x,data.enemies[i].y,data.enemies[i].direction,0,0);
           map.enemies.push(enemie);
@@ -372,11 +393,13 @@ function fillMap(){
         
         //Segons la direccio d'un enemic posem un valor a cada casella
         for (let i = 0; i < map.enemies.length; i++) {
+            //console.log(map.enemies[i].dir);
             let rotation = 0;
-            let posibleDir = ['O','N','E','S'];
-            for (let p = 0; p < posibleDir.length; p++) {
-                if(posibleDir[p] == map.enemies[p].dir){
+            let posibleDir = ['N','S','E','O'];
+            for (let p = 0; p < 4; p++) {
+                if(posibleDir[p] == map.enemies[i].dir){
                     rotation = p;
+                    break;
                 }
             }
             map.cuadricula[map.enemies[i].x][map.enemies[i].y] = 4 + rotation;
@@ -485,7 +508,7 @@ function drawMap(){
             }
 
             if(map.cuadricula[i][j] == 4){
-                //console.log("enemic");
+                //console.log("enemic1");
                 context.beginPath();
                 context.moveTo(i * 8 + 1, j * 8 + 4);
                 context.lineTo(i * 8 + 7, j * 8 + 1);
@@ -499,7 +522,7 @@ function drawMap(){
             }
 
             if(map.cuadricula[i][j] == 5){
-                //console.log("enemic");
+                //console.log("enemic2");
                 context.beginPath();
                 context.moveTo(i * 8 + 4, j * 8 + 1);
                 context.lineTo(i * 8 + 7, j * 8 + 7);
@@ -513,7 +536,7 @@ function drawMap(){
             }
 
             if(map.cuadricula[i][j] == 6){
-                //console.log("enemic");
+                //console.log("enemic3");
                 context.beginPath();
                 context.moveTo(i * 8 + 7, j * 8 + 4);
                 context.lineTo(i * 8 + 1, j * 8 + 1);
@@ -527,7 +550,7 @@ function drawMap(){
             }
 
             if(map.cuadricula[i][j] == 7){
-                //console.log("enemic");
+                //console.log("enemic4");
                 context.beginPath();
                 context.moveTo(i * 8 + 4, j * 8 + 7);
                 context.lineTo(i * 8 + 7, j * 8 + 1);
@@ -694,6 +717,32 @@ function drawEnemie(){
     })  
 }
 /**
+ * Summary: Funcio que retorna la vida dels enemics que tens devant 
+ */
+function checkDeadEnemie(){
+    getNearPlayers(player.token)
+    .then(function (datums) {
+        var data = JSON.parse(datums);
+        var enemies = data.enemies;
+        var pos = getFrontPos();
+        
+        
+        for (let i = 0; i < enemies.length; i++) {
+            if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
+                if(enemies[i].vitalpoints <= 0){
+                    map.cuadricula[enemies[i].x][enemies[i].y] = 0;
+                    break;
+                }
+            }
+        }
+        
+    })
+    .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+    }) 
+}
+
+/**
  * Summary: Funcio que detecta si tens un objecte devant
  */
 function detectObject(){
@@ -809,6 +858,7 @@ function actualitzaInfo(){
  */
 window.onload = function() {
     $("#startB").show();
+    $("#player").show();
     $("#reviveB").hide();
     $("#deleteB").hide();
 };
