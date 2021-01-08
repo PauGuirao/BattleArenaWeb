@@ -208,6 +208,12 @@ class gameManager{
                     actualitzaBruixola();
                     console.log(player);
                     break;
+                case 81 :
+                    player.attack();
+                    break;
+                case 69 :
+                    player.escape();
+                    break;
                 default:
                     break;
             }
