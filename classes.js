@@ -24,7 +24,7 @@ class Player{
                 attack(this.token,this.d)
                 .then(function (datums) {
                     var data = JSON.parse(datums);
-                    localStorage.setItem('DamageTotal',data);
+                    saveToLocal('DamageTotal',data);
                     document.getElementById("atacEnemic").innerHTML = "Li has tret "+data+" de vida!";
                     var audio = new Audio('resources/attack.wav');
                     audio.play();
@@ -176,7 +176,7 @@ class gameManager{
         map = new Map();
         drawPlayerInfo();
         setInterval(document.onkeydown = this.checkKeys, 2000);
-        setInterval(function() {fillMap(); actualitzaBruixola(); drawEnemie(); checkVitals();},2000);
+        setInterval(function() {fillMap(); actualitzaBruixola(); drawEnemie(); checkVitals(); drawPlayerInfo();},2000);
     }
 
     checkKeys(e){
@@ -448,10 +448,26 @@ function drawPlayerInfo(){
     document.getElementById("defense").innerHTML = ""+player.defense;
     document.getElementById("state").innerHTML = ""+player.state;
 
-    document.getElementById("pt").innerHTML = ""+localStorage.getItem('PartidesTotals');
-    document.getElementById("dt").innerHTML = ""+localStorage.getItem('DamageTotal');
-    document.getElementById("kt").innerHTML = ""+localStorage.getItem('KillsTotals');
-    document.getElementById("mt").innerHTML = ""+localStorage.getItem('MortsTotals');
+    if(localStorage.getItem('PartidesTotals') > 0){
+        document.getElementById("pt").innerHTML = "Partides Totals: "+localStorage.getItem('PartidesTotals');
+    }else{
+        document.getElementById("pt").innerHTML = "Partides Totals: 0";
+    }
+    if(localStorage.getItem('DamageTotal') > 0){
+        document.getElementById("dt").innerHTML = "Damage Total: "+localStorage.getItem('DamageTotal');
+    }else{
+        document.getElementById("dt").innerHTML = "Damage Total: 0";
+    }
+    if(localStorage.getItem('KillsTotals') > 0){
+        document.getElementById("kt").innerHTML = "Kills Totals: "+localStorage.getItem('KillsTotals');
+    }else{
+        document.getElementById("kt").innerHTML = "Kills Totals: 0";
+    }
+    if(localStorage.getItem('MortsTotals') > 0){
+        document.getElementById("mt").innerHTML = "Morts Totals: "+localStorage.getItem('MortsTotals');
+    }else{
+        document.getElementById("mt").innerHTML = "Morts Totals: 0";
+    }
 }
 
 /**
@@ -801,7 +817,7 @@ function detectKill(){
             if(enemies[i].x == pos[0] && enemies[i].y == pos[1]){
                 
                 if(enemies[i].vitalpoints <= 0){
-                    localStorage.setItem('KillsTotals',1);
+                    saveToLocal('KillsTotals',1);
                     console.log('Has matat');
                     break;
                 }
