@@ -44,6 +44,8 @@
                         <button id="startB" type="button" class="btn btn-secondary" onclick="startGame()">New Player</button>
                         <button id="reviveB" type="button" class="btn btn-secondary" onclick="respawnUser()">Revive Player</button>
                         <button id="deleteB" type="button" class="btn btn-secondary" onclick="deleteUser()">Delete Player</button>
+                        <button id="instruB" type="button" class="btn btn-secondary" onclick="togglePopup()">Instrucions</button>
+
                     </div>
                 <!-- /Player's Options-->
             </div>
@@ -52,6 +54,20 @@
         <!--/Menu-->
     </header>
     <main>
+        <!-- Instruccions Popup -->
+        <div class="popup" id="popup-1">
+            <div class="overlay"></div>
+            <div class="content">
+              <div class="close-btn" onclick="togglePopup()">&times;</div>
+              <h2>INSTRUCIONS</h2>
+              <p>Benvingut el joc Battle Arena.</p>
+              <p>En aquest joc hauras de moure't per una arena plena d'enemics a qui hauras d'intentar matar. Bona sort!</p>
+              <p>Per moure't utilitza les fletxes del teclat o les tecles virtuals de l'interficie</p>
+              <p>Per atacar utilitza la tecla Q i per fugir utilitza E. També pots utilitzar les tecles virtuals</p>
+              <p>Joc creat per Pau Guirao, Arnau Olivé i Jaume Guillen</p>
+            </div>
+        </div>
+        <!-- /Instruccions Popup -->
         <div class="container">
             <div class="row">
                 <div class="col">

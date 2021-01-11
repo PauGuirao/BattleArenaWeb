@@ -881,18 +881,10 @@ function saveToLocal(key,item){
     }
     console.log(value);
 }
-/**
- * Summary: Funcio que actualitza el joc de forma periodica
- */
-/**
-function actualitzaInfo(){
-    fillMap();
-    actualitzaBruixola();
-    drawEnemie();
-    //actualizePlayer();
-}
-*/
 
+function togglePopup(){
+    document.getElementById("popup-1").classList.toggle("active");
+}
 /**
  * Summary: Funcio que amaga elements el iniciar el joc
  */
