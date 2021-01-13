@@ -251,6 +251,7 @@ function startGame(){
         $("#player").hide();
         $("#reviveB").show();
         $("#deleteB").show();
+        $("#gameContainer").show();
     }
 }
 
@@ -893,4 +894,5 @@ window.onload = function() {
     $("#player").show();
     $("#reviveB").hide();
     $("#deleteB").hide();
+    $("#gameContainer").hide();
 };

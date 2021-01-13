@@ -41,7 +41,7 @@
                  <!-- Player's Options-->
                     <div class="col" id="buttons">
                         <input type="text" id="player" placeholder="PLAYER NAME">
-                        <button id="startB" type="button" class="btn btn-secondary" onclick="startGame()">New Player</button>
+                        <button id="startB" type="button" class="btn btn-secondary" onclick="startGame()">Start Game!</button>
                         <button id="reviveB" type="button" class="btn btn-secondary" onclick="respawnUser()">Revive Player</button>
                         <button id="deleteB" type="button" class="btn btn-secondary" onclick="deleteUser()">Delete Player</button>
                         <button id="instruB" type="button" class="btn btn-secondary" onclick="togglePopup()">Instrucions</button>
@@ -68,7 +68,7 @@
             </div>
         </div>
         <!-- /Instruccions Popup -->
-        <div class="container">
+        <div id="gameContainer" class="container">
             <div class="row">
                 <div class="col">
                     <!-- Compass-->
@@ -223,7 +223,7 @@
                     <!-- /Keyboard--> 
 
                 </div>
-            </div>
+        </div>
     </main>
     <footer>
     </footer>
