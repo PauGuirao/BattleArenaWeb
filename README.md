@@ -1,12 +1,12 @@
 # Battle Arena Web
 This is Multiplayer Battle Arena Game created for my Web Projects Class in La Salle University. It was created using Javascript, HTML, CSS and style frame framework Bootstrap        
-<img src="resources/Presentation.png" alt="Example Render" width="400" height="400">
+<img src="resources/Presentation.png" alt="Example Render" width="900" height="350">
 
 ## Player
 The game uses an API to acces real time data about enemies,player info and player position. Once the data is retrieved from the API, is displayed so the user can see it in real time. For stability purposes the data is actualized every 2 seconds. 
 
 ### Player Info
-<img src="resources/PlayerInfo.png" alt="Example Render" width="900" height="400">
+<img src="resources/PlayerInfo.png" alt="Example Render" width="500" height="300">
 
 - Health: float that stores the remaining health.
 - Attack: float that stores the attack points of the player.
@@ -62,9 +62,9 @@ The game uses an API to acces real time data about enemies,player info and playe
 - Scape: string that shows if the user is deead or alive. ("ALIVE" or "DEAD")
 
 
-## Create Single 2D Texture
-- name:  Name of the image
-- type:  File type ('jpg','png')
-```bash
-$ createTexture(String name, String type)
-```
+## Game Map
+The game uses an API to acces real time data about players position. Once the data is retrieved from the API, is displayed in a grid. For stability purposes the data is actualized every 2 seconds
+<img src="resources/Map.png" alt="Example Render" width="300" height="500">
+- Red Triangles: Current Enemies on the map
+- Green Triangle: Player position on the map
+
