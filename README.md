@@ -1,5 +1,5 @@
 # Random Planet Generator
-This is a random 2D planet generator created in Processing using Java perlin noise        
+This is Multiplayer Battle Arena Game created for my Web Projects Class in La Salle University. It was created using Javascript, HTML, CSS and style frame framework Bootstrap        
 <img src="Render.jpg" alt="Example Render" width="400" height="400">
 ## Create Planet
 Call this functions to create a random 2D planet
