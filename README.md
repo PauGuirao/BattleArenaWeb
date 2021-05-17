@@ -1,21 +1,62 @@
 # Random Planet Generator
 This is Multiplayer Battle Arena Game created for my Web Projects Class in La Salle University. It was created using Javascript, HTML, CSS and style frame framework Bootstrap        
-<img src="Render.jpg" alt="Example Render" width="400" height="400">
-## Create Planet
-Call this functions to create a random 2D planet
-- radius: integer to change the planet radius (normal:150)
-- level_1: float to change the first layer of ground altitude (recommended: > 0.5)
-- level_2: float to change the second layer of ground altitude (recommended: > 0.6)
-```bash
-$ drawPlanet(int radius, float level_1, float level_2)
+<img src="Presentation.png" alt="Example Render" width="400" height="400">
+## Player
+The game uses an API to acces real time data about enemies,player info and player position. Once the data is retrieved from the API, is displayed so the user can see it in real time. For stability purposes the data is actualized every 2 seconds. 
+### Player Info
+<img src="PlayerInfo.png" alt="Example Render" width="400" height="400">
+- Health: float that stores the remaining health.
+- Attack: float that stores the attack points of the player.
+- Shield: float that stores the shield points of the player.
+- State:  string that shows if the user is deead or alive. ("ALIVE" or "DEAD")
+### Player Functionality
+<img src="Functions.png" alt="Example Render" width="400" height="400">
+- Move Forward: float that stores the remaining health.
+
+```javascript
+    moveForward(){
+        var checkPos = getFrontPos();
+        if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
+            movePlayer(this.token,this.d)
+            .then(function (datums) {
+                actualizePlayer();
+                var audio = new Audio('resources/step.wav');
+                audio.play();
+            })
+            .catch(function (err) {
+                console.error('Augh, there was an error!', err.statusText);
+            })
+        } 
+    }
 ```
-## Create Moon
-Call this functions to add a moon to the texture
-- radius:  integer to change the moon radius
-- distance:  integer to change the moon distance from the planet
-```bash
-$ drawMoon(int radius, int distance)
+- Move Backwards: float that stores the attack points of the player.
+
+```javascript
+    moveBackwards(){
+        var posibleDir = ['N','E','S','O','N','E'];
+        var checkPos = getFrontPos();
+        if(map.getPosInfo(checkPos[0], checkPos[1]) != 100){
+            for (let i = 0; i < posibleDir.length; i++) {
+                if(posibleDir[i] == this.d){
+                    movePlayer(this.token, posibleDir[i+2])
+                    .then(function (datums) {
+                        actualizePlayer();
+                    })
+                    .catch(function (err) {
+                        console.error('Augh, there was an error!', err.statusText);
+                    })
+                    break;
+                }
+            }
+        }
+    }
 ```
+- Rotate Left: float that stores the shield points of the player.
+- Rotate Right: string that shows if the user is deead or alive. ("ALIVE" or "DEAD")
+- Attack: string that shows if the user is deead or alive. ("ALIVE" or "DEAD")
+- Scape: string that shows if the user is deead or alive. ("ALIVE" or "DEAD")
+
+
 ## Create Single 2D Texture
 - name:  Name of the image
 - type:  File type ('jpg','png')
