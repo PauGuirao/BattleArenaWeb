@@ -63,7 +63,7 @@ The game uses an API to acces real time data about enemies,player info and playe
 
 
 ## Game Map
-<img src="resources/Map.png" alt="Example Render" width="500" height="300">
+<img src="resources/Map.png" alt="Example Render" width="500" height="400">
 The game uses an API to acces real time data about players position. Once the data is retrieved from the API, is displayed in a grid. For stability purposes the data is actualized every 2 seconds
 - Red Triangles: Current Enemies on the map
 - Green Triangle: Player position on the map
