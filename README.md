@@ -1,17 +1,22 @@
 # Random Planet Generator
 This is Multiplayer Battle Arena Game created for my Web Projects Class in La Salle University. It was created using Javascript, HTML, CSS and style frame framework Bootstrap        
 <img src="Presentation.png" alt="Example Render" width="400" height="400">
+
 ## Player
 The game uses an API to acces real time data about enemies,player info and player position. Once the data is retrieved from the API, is displayed so the user can see it in real time. For stability purposes the data is actualized every 2 seconds. 
+
 ### Player Info
 <img src="PlayerInfo.png" alt="Example Render" width="400" height="400">
+
 - Health: float that stores the remaining health.
 - Attack: float that stores the attack points of the player.
 - Shield: float that stores the shield points of the player.
 - State:  string that shows if the user is deead or alive. ("ALIVE" or "DEAD")
+
 ### Player Functionality
 <img src="Functions.png" alt="Example Render" width="400" height="400">
-- Move Forward: float that stores the remaining health.
+
+- Move Forward: Function to move the player 1 Square Forward in the map 
 
 ```javascript
     moveForward(){

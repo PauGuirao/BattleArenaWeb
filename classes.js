@@ -53,6 +53,7 @@ class Player{
             })
         } 
     }
+    
     moveBackwards(){
         var posibleDir = ['N','E','S','O','N','E'];
         var checkPos = getFrontPos();
